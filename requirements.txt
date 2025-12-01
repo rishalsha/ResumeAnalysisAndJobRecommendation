@@ -1,0 +1,7 @@
+streamlit
+langchain
+selenium
+PyPDF2
+python-docx
+bcrypt
+pymongo
