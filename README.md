@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Project Setup
 
 This document details the step-by-step process of setting up the project environment.
@@ -77,3 +78,6 @@ A `.env` file was created to store sensitive credentials, such as API keys. This
 ## Next Steps
 
 The project is now set up and ready for development. The next steps will involve developing the application's features, starting with the main application entry point in `main.py`.
+=======
+# ResumeAnalysisAndJobRecommendation
+>>>>>>> 14de0594813cddeb4aae4a51f00148a02de0affc
