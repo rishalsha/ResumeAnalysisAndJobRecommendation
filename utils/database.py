@@ -1,9 +1,4 @@
 import sqlite3
-import re
-
-def validate_email(email):
-    pattern = r"^[\w\.-]+@[\w\.-]+\.\w+$"
-    return re.match(pattern, email)
 
 DB_PATH = "InfosysDatabase.db"
 
@@ -39,7 +34,7 @@ c.execute(
         email TEXT UNIQUE NOT NULL ,
         hashed_password TEXT NOT NULL,
         registration_date TEXT DEFAULT (datetime('now')),
-        resume_path_file TEXT
+        resume_file_path TEXT
     )
     """
 )
