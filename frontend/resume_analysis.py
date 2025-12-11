@@ -5,21 +5,29 @@ from backend.llm_analyzer import LLMAnalyzer
 from utils.database import get_db_connection
 
 
-def _get_user_resume_text() -> str:
-    """Fetch the user's most recent extracted resume text from the database."""
+def _get_user_resume_text_with_ts():
+    """Fetch the user's most recent extracted resume text and its timestamp."""
     user_id = st.session_state.get("user_id")
     if not user_id:
-        return ""
-    
+        return "", None
+
     conn = get_db_connection()
     cursor = conn.cursor()
     try:
         cursor.execute(
-            "SELECT extracted_text FROM resume_analysis WHERE user_id = ? ORDER BY analysis_timestamp DESC LIMIT 1",
-            (user_id,)
+            """
+            SELECT extracted_text, analysis_timestamp
+            FROM resume_analysis
+            WHERE user_id = ?
+            ORDER BY analysis_timestamp DESC
+            LIMIT 1
+            """,
+            (user_id,),
         )
         row = cursor.fetchone()
-        return row["extracted_text"] if row else ""
+        if not row:
+            return "", None
+        return row["extracted_text"], row["analysis_timestamp"]
     finally:
         conn.close()
 
@@ -32,15 +40,25 @@ def analysis_page():
     st.title("AI Resume Analysis")
     st.caption("Analyze your uploaded resume using AI (LangChain-enabled Ollama).")
 
-    # Fetch user's resume from database
-    resume_text = _get_user_resume_text()
+    # Fetch user's resume from database - always fresh (with timestamp)
+    resume_text, resume_ts = _get_user_resume_text_with_ts()
     
     if not resume_text:
-        st.warning("No resume found. Please upload a resume in the Dashboard first.")
+        st.warning("❌ No resume found. Please upload a resume in the Dashboard first.")
+        if st.button("Go to Dashboard to Upload"):
+            st.session_state['page'] = 'Dashboard'
+            st.rerun()
         st.stop()
 
-    if "resume_text" not in st.session_state:
+    st.success("✅ Resume loaded and ready for analysis")
+
+    # Refresh editable text if database content changed
+    if (
+        "resume_source_ts" not in st.session_state
+        or st.session_state.get("resume_source_ts") != resume_ts
+    ):
         st.session_state["resume_text"] = resume_text
+        st.session_state["resume_source_ts"] = resume_ts
 
     col1, col2 = st.columns([1, 1])
 

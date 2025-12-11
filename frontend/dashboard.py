@@ -41,40 +41,47 @@ def dashboard_page():
 
     st.title(f"Welcome to your Dashboard, {get_current_user_name()}!")
 
-
+    # Always refresh from database to ensure latest data
     conn = get_db_connection()
     cursor = conn.cursor()
     user_id = st.session_state['user_id']
     cursor.execute("SELECT resume_file_path FROM users WHERE id = ?", (user_id,))
     user = cursor.fetchone()
-    cursor.execute("SELECT analysis_timestamp FROM resume_analysis WHERE user_id = ? ORDER BY analysis_timestamp DESC", (user_id,))
+    cursor.execute("SELECT analysis_timestamp FROM resume_analysis WHERE user_id = ? ORDER BY analysis_timestamp DESC LIMIT 1", (user_id,))
     latest_analysis = cursor.fetchone()
     cursor.execute("SELECT COUNT(*) FROM job_recommendations WHERE user_id = ?", (user_id,))
     job_recommendation_count = cursor.fetchone()[0]
     conn.close()
+    
+    # Store in session to avoid multiple DB queries in same render
+    st.session_state['user_resume_path'] = user['resume_file_path'] if user else None
 
+    has_resume = bool(st.session_state.get('user_resume_path'))
 
     st.header("Quick Stats")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric("Resume Status", "Uploaded" if user and user['resume_file_path'] else "Not Uploaded")
+        if has_resume:
+            st.metric("Resume Status", "✅ Uploaded")
+        else:
+            st.markdown("**Resume Status**")
+            st.markdown("<span style='font-size:14px'>❌ Not Uploaded</span>", unsafe_allow_html=True)
     with col2:
         st.metric("Last Analysis", latest_analysis['analysis_timestamp'].split(" ")[0] if latest_analysis else "Never")
     with col3:
         st.metric("Job Recommendations", job_recommendation_count)
 
-
     st.header("What would you like to do?")
     col1, col2 = st.columns(2)
+    
     with col1:
-        if not (user and user['resume_file_path']):
-            if st.button("Upload Your Resume"):
-                # Expand the resume uploader expander
+        if not has_resume:
+            if st.button("📤 Upload Your Resume"):
                 st.session_state['show_resume_uploader'] = True
                 st.rerun()
     with col2:
-        if user and user['resume_file_path']:
-            if st.button("Analyze Your Resume"):
+        if has_resume:
+            if st.button("🔍 Analyze Your Resume"):
                 st.session_state['page'] = 'Resume Analysis'
                 st.rerun()
 
@@ -111,6 +118,9 @@ def dashboard_page():
                         conn.commit()
                         conn.close()
 
+                        # Update session immediately so UI reflects new state before rerun
+                        st.session_state['user_resume_path'] = file_path
+
                         # Parse the resume and store the extracted text
                         parse_resume(file_path, user_id)
 
@@ -119,11 +129,16 @@ def dashboard_page():
                     st.session_state['show_resume_uploader'] = False
                     st.rerun()
 
-        if user and user['resume_file_path']:
-            st.write(f"Current resume: {os.path.basename(user['resume_file_path'])}")
-            if st.button("Delete Resume"):
+        if st.session_state.get('user_resume_path'):
+            st.write(f"📄 Current resume: {os.path.basename(st.session_state['user_resume_path'])}")
+            if st.button("🗑️ Delete Resume"):
                 # Delete the file
-                os.remove(user['resume_file_path'])
+                try:
+                    if os.path.exists(st.session_state['user_resume_path']):
+                        os.remove(st.session_state['user_resume_path'])
+                except Exception as e:
+                    st.warning(f"Could not delete file: {e}")
+                
                 # Update the database
                 conn = get_db_connection()
                 cursor = conn.cursor()
@@ -132,6 +147,8 @@ def dashboard_page():
                 cursor.execute("UPDATE users SET resume_file_path = NULL WHERE id = ?", (user_id,))
                 conn.commit()
                 conn.close()
+                
+                st.session_state['user_resume_path'] = None
                 st.success("Resume deleted successfully.")
                 st.rerun()
 

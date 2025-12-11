@@ -51,6 +51,7 @@ def clean_text(text):
 def parse_resume(file_path, user_id):
     """
     Parses a resume file, extracts text, and stores it in the database.
+    On re-upload, deletes old entries and inserts new one.
     """
     file_extension = os.path.splitext(file_path)[1].lower()
     extracted_text = None
@@ -70,6 +71,10 @@ def parse_resume(file_path, user_id):
         conn = get_db_connection()
         cursor = conn.cursor()
         try:
+            # Delete old resume analysis entries for this user (re-upload scenario)
+            cursor.execute("DELETE FROM resume_analysis WHERE user_id = ?", (user_id,))
+            
+            # Insert new extracted text
             cursor.execute(
                 "INSERT INTO resume_analysis (user_id, extracted_text) VALUES (?, ?)",
                 (user_id, cleaned_text)
@@ -79,6 +84,7 @@ def parse_resume(file_path, user_id):
             return cleaned_text
         except Exception as e:
             logging.error(f"Failed to store extracted text for user_id: {user_id}. Error: {e}")
+            conn.rollback()
             return None
         finally:
             conn.close()

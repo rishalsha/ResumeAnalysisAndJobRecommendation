@@ -465,68 +465,14 @@ if __name__ == "__main__":
         print(f"Please ensure Ollama is running at {analyzer.ollama_host}")
         exit(1)
     
-    # Sample resume
-    sample_resume = """
-    John Doe
-    Software Engineer
-    john.doe@example.com | (555) 123-4567 | LinkedIn: linkedin.com/in/johndoe
-    
-    PROFESSIONAL SUMMARY
-    Senior Software Engineer with 5+ years of experience developing scalable web applications.
-    Proficient in Python, Django, React, and cloud technologies. Strong background in microservices
-    architecture and DevOps practices.
-    
-    EXPERIENCE
-    Senior Software Engineer | Tech Corp | 2020-Present
-    - Led development of microservices architecture serving 1M+ users
-    - Implemented CI/CD pipeline reducing deployment time by 60%
-    - Mentored team of 4 junior developers
-    - Technologies: Python, Django, PostgreSQL, Docker, Kubernetes
-    
-    Software Engineer | Innovate LLC | 2018-2020
-    - Built e-commerce platform handling $2M+ in transactions
-    - Optimized database queries improving performance by 40%
-    - Technologies: Python, Flask, React, AWS
-    
-    Junior Developer | StartUp Inc | 2017-2018
-    - Developed REST APIs for mobile applications
-    - Fixed 50+ bugs in production systems
-    - Technologies: Python, Django, PostgreSQL
-    
-    EDUCATION
-    B.S. in Computer Science | University of Technology | 2017
-    
-    SKILLS
-    Languages: Python, JavaScript, SQL
-    Frameworks: Django, Flask, React, FastAPI
-    Tools: Docker, Kubernetes, Git, CI/CD
-    Cloud: AWS, Google Cloud
-    """
-    
-    print("\n" + "="*60)
-    print("TESTING RESUME ANALYSIS")
-    print("="*60)
-    
-    # Test individual analyses
-    print("\n1. STRENGTHS ANALYSIS")
-    print("-" * 60)
-    strengths = analyzer.get_strengths(sample_resume)
-    print(json.dumps(strengths, indent=2))
-    
-    print("\n2. SKILLS EXTRACTION")
-    print("-" * 60)
-    skills = analyzer.get_skills(sample_resume)
-    print(json.dumps(skills, indent=2))
-    
-    print("\n3. IMPROVEMENT SUGGESTIONS")
-    print("-" * 60)
-    suggestions = analyzer.get_improvements(sample_resume)
-    print(json.dumps(suggestions, indent=2))
-    
-    # Token statistics
-    print("\n" + "="*60)
-    print("TOKEN USAGE STATISTICS")
-    print("="*60)
-    stats = analyzer.get_token_stats()
-    print(json.dumps(stats, indent=2))
+    print("\n✅ Connection successful! Analyzer is ready for use.")
+    print("\nTo test analysis, use the Streamlit GUI in the Resume Analysis page.")
+    print("API is also available for programmatic use:")
+    print("  - analyzer.get_strengths(resume_text)")
+    print("  - analyzer.get_weaknesses(resume_text)")
+    print("  - analyzer.get_skills(resume_text)")
+    print("  - analyzer.get_improvements(resume_text)")
+    print("  - analyzer.match_job(resume_text, job_description)")
+    print("  - analyzer.comprehensive_analysis(resume_text)")
+
 

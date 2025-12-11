@@ -1,4 +1,4 @@
-from frontend import dashboard, profile, resume_analysis, job_recommendations, settings
+from frontend import dashboard, profile, resume_analysis, job_recommendations, settings, showdatabase
 
 
 LOGGED_IN_PAGES = {
@@ -6,6 +6,7 @@ LOGGED_IN_PAGES = {
     "My Profile": profile.profile_page,
     "Resume Analysis": resume_analysis.analysis_page,
     "Job Recommendations": job_recommendations.recommendations_page,
+    "Database Status": showdatabase.database_status_page,
     "Settings": settings.settings_page,
 }
 
