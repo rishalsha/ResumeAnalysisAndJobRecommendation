@@ -19,30 +19,40 @@ def main():
     if is_user_logged_in():
         pages = LOGGED_IN_PAGES
         page_names = list(pages.keys())
-        
+
+        # If current page is not valid for logged-in state, default to Dashboard
+        if st.session_state.get('page') not in pages:
+            st.session_state['page'] = 'Dashboard'
+
         if st.sidebar.button("Logout"):
             logout_user()
             st.session_state['page'] = 'Login'
             st.rerun()
-        
+
         st.sidebar.divider()
-        
+
         # Navigation buttons instead of radio
         for page_name in page_names:
             if st.sidebar.button(page_name, use_container_width=True):
                 st.session_state['page'] = page_name
                 st.rerun()
-    
+
     else:
         pages = {
             "Login": login.login_page,
             "Registration": registration.registration_page
         }
+
+        # If current page is not valid for logged-out state, default to Login
+        if st.session_state.get('page') not in pages:
+            st.session_state['page'] = 'Login'
+
         for page_name in pages.keys():
             if st.sidebar.button(page_name, use_container_width=True):
                 st.session_state['page'] = page_name
                 st.rerun()
 
+    # Safely render the resolved page
     pages[st.session_state['page']]()
 
 if __name__ == "__main__":

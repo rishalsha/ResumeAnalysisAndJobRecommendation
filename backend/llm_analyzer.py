@@ -68,13 +68,9 @@ class TokenCounter:
 
 
 class LLMAnalyzer:
-    """
-    Analyze resumes using Ollama LLM.
-    Supports prompt templates for different analysis tasks.
-    """
-    
+
     def __init__(self, model: Optional[str] = None):
-        """Initialize LLM Analyzer with Ollama client."""
+        
         self.ollama_host = os.getenv("OLLAMA_HOST", "http://localhost:11434")
         self.model = model or os.getenv("OLLAMA_MODEL", "mistral")
         self.max_retries = int(os.getenv("MAX_RETRIES", "3"))
