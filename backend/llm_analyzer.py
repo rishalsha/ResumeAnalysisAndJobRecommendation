@@ -81,12 +81,15 @@ class LLMAnalyzer:
         self.timeout = int(os.getenv("REQUEST_TIMEOUT", "30"))
         self.temperature = float(os.getenv("TEMPERATURE", "0.2"))
         self.max_tokens = int(os.getenv("MAX_TOKENS", "1024"))
+        self.use_langchain = os.getenv("USE_LANGCHAIN", "false").lower() == "true"
         
         self.token_counter = TokenCounter()
         self.client = None
+        self.lc_model = None
         
         logger.info(f"Initializing LLMAnalyzer with model: {self.model}, host: {self.ollama_host}")
         self._initialize_client()
+        self._initialize_langchain()
     
     def _initialize_client(self):
         """Initialize Ollama client with error handling."""
@@ -99,6 +102,23 @@ class LLMAnalyzer:
         except Exception as e:
             logger.error(f"Failed to initialize Ollama client: {e}")
             self.client = None
+
+    def _initialize_langchain(self):
+        """Initialize LangChain ChatOllama model if enabled."""
+        if not self.use_langchain:
+            return
+        try:
+            from langchain_community.chat_models import ChatOllama
+            self.lc_model = ChatOllama(
+                model=self.model,
+                base_url=self.ollama_host,
+                temperature=self.temperature,
+                num_predict=self.max_tokens,
+            )
+            logger.info("LangChain ChatOllama initialized successfully")
+        except Exception as e:
+            logger.error(f"Failed to initialize LangChain ChatOllama: {e}")
+            self.lc_model = None
     
     def test_connection(self) -> Dict[str, Any]:
         """Test connection to Ollama server."""
@@ -254,7 +274,10 @@ Return ONLY valid JSON, no additional text."""
     # ============ LLM CALL METHODS ============
     
     def _call_ollama_with_retry(self, prompt: str) -> Optional[str]:
-        """Call Ollama API with retry logic and error handling."""
+        """Call Ollama API (LangChain if enabled) with retry logic and error handling."""
+        if self.use_langchain and self.lc_model:
+            return self._call_langchain_with_retry(prompt)
+
         for attempt in range(self.max_retries):
             try:
                 logger.info(f"Calling Ollama (attempt {attempt + 1}/{self.max_retries})...")
@@ -297,6 +320,21 @@ Return ONLY valid JSON, no additional text."""
                     time.sleep(2 ** attempt)
         
         logger.error(f"Failed to get response from Ollama after {self.max_retries} attempts")
+        return None
+
+    def _call_langchain_with_retry(self, prompt: str) -> Optional[str]:
+        """Call Ollama via LangChain ChatOllama with retry logic."""
+        for attempt in range(self.max_retries):
+            try:
+                logger.info(f"Calling LangChain ChatOllama (attempt {attempt + 1}/{self.max_retries})...")
+                result = self.lc_model.invoke(prompt)
+                # ChatOllama returns an AIMessage; cast to string
+                return str(result.content if hasattr(result, "content") else result)
+            except Exception as e:
+                logger.warning(f"LangChain call failed (attempt {attempt + 1}/{self.max_retries}): {e}")
+                if attempt < self.max_retries - 1:
+                    time.sleep(2 ** attempt)
+        logger.error(f"Failed to get response from LangChain/Ollama after {self.max_retries} attempts")
         return None
     
     def analyze_resume(self, resume_text: str, prompt_func: Callable) -> Dict[str, Any]:

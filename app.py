@@ -18,30 +18,32 @@ def main():
 
     if is_user_logged_in():
         pages = LOGGED_IN_PAGES
+        page_names = list(pages.keys())
+        
         if st.sidebar.button("Logout"):
             logout_user()
             st.session_state['page'] = 'Login'
             st.rerun()
         
-        # Get the index of the current page
-        page_names = list(pages.keys())
-        try:
-            index = page_names.index(st.session_state['page'])
-        except ValueError:
-            index = 0
-
-        selection = st.sidebar.radio("Go to", page_names, key="navigation", index=index)
+        st.sidebar.divider()
+        
+        # Navigation buttons instead of radio
+        for page_name in page_names:
+            if st.sidebar.button(page_name, use_container_width=True):
+                st.session_state['page'] = page_name
+                st.rerun()
     
     else:
         pages = {
             "Login": login.login_page,
             "Registration": registration.registration_page
         }
-        selection = st.sidebar.radio("Go to", list(pages.keys()), key="navigation")
+        for page_name in pages.keys():
+            if st.sidebar.button(page_name, use_container_width=True):
+                st.session_state['page'] = page_name
+                st.rerun()
 
-    st.session_state['page'] = selection
-
-    pages[selection]()
+    pages[st.session_state['page']]()
 
 if __name__ == "__main__":
     main()
