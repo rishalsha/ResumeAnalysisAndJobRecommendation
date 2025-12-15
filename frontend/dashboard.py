@@ -217,3 +217,4 @@ def dashboard_page():
 
     st.header("Recent Activity")
     st.write("This section is under construction.")
+

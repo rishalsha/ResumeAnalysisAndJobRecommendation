@@ -8,7 +8,8 @@ An intelligent application that analyzes user resumes and provides personalized 
 - [Project Structure](#project-structure)
 - [Setup & Installation](#setup--installation)
 - [Running the Application](#running-the-application)
-- [Project Milestones](#project-milestones)
+- [Resume Analysis & Strengths/Weaknesses Analyzer](#resume-analysis--strengthsweaknesses-analyzer)
+- [LLM Setup](#llm-setup)
 - [Database Schema](#database-schema)
 - [Contributing](#contributing)
 
@@ -17,10 +18,13 @@ An intelligent application that analyzes user resumes and provides personalized 
 ✅ **User Authentication**: Secure registration and login with bcrypt password hashing
 ✅ **Resume Upload**: Support for PDF and DOCX file formats with validation
 ✅ **Text Extraction**: Automatic text extraction from resume files
+✅ **Resume Analysis**: AI-powered analysis using Ollama LLM with strengths/weaknesses detection
+✅ **Intelligent Caching**: Two-level cache (memory + disk) to avoid re-analyzing identical resumes
+✅ **Confidence Scoring**: 0-100% confidence scores on all analyses
+✅ **Database Storage**: Persistent storage of analysis results linked to user profiles
 ✅ **User Dashboard**: Central hub for navigation and quick stats
 ✅ **Profile Management**: User profile and settings pages
-✅ **Job Recommendations**: Personalized job recommendations (in development)
-✅ **Resume Analysis**: AI-powered resume analysis (in development)
+✅ **Job Recommendations**: Personalized job recommendations based on resume analysis
 
 ## Project Structure
 
@@ -104,6 +108,16 @@ The database is automatically initialized when `utils/database.py` is imported. 
 
 ## Running the Application
 
+### Prerequisites: Start Ollama First
+
+Ollama must be running before starting the Streamlit app. Open a terminal and run:
+
+```bash
+ollama serve --host localhost:11434
+```
+
+This starts the LLM service that powers the resume analysis features.
+
 ### Start the Streamlit Server
 
 ```bash
@@ -120,121 +134,127 @@ For development with auto-reload:
 streamlit run app.py --logger.level=debug
 ```
 
-## Project Milestones
+---
 
-### MILESTONE 1: Foundation & User Registration (7 Tasks)
+## Resume Analysis & Strengths/Weaknesses Analyzer
 
-#### ✅ Task 1: Project Environment Setup
+### Overview
 
-**Status**: COMPLETED
+AI-powered analyzer using Ollama LLM to identify resume strengths and weaknesses with detailed categorization, severity levels, and actionable recommendations.
 
-- [x] Python 3.9+ environment
-- [x] Virtual environment created
-- [x] All required libraries installed
-- [x] Organized folder structure implemented
-- [x] Git repository initialized
-- [x] .gitignore file created
-- [x] .env file support
-- [x] README.md documentation
+### Analysis Types
 
-#### ✅ Task 2: Design Database Schema
+#### **1. Strengths Analysis**
 
-**Status**: COMPLETED
+- Identifies 5-7 key strengths in order of importance
+- Categories: formatting, content, skills, experience, education, achievements
+- Importance levels: critical, high, medium
+- Confidence scoring (0-100%)
+- Specific examples from resume text
 
-- [x] SQLite database chosen for simplicity
-- [x] Users schema implemented
-  - user_id (Primary Key)
-  - name, email (unique), password (hashed)
-  - registration_date, resume_file_path
-- [x] Resume Analysis schema implemented
-  - analysis_id, user_id (Foreign Key)
-  - extracted_text, analysis_scores, strengths, weaknesses
-  - identified_skills, recommended_skills, analysis_timestamp
-- [x] Job Recommendations schema implemented
-  - job_id, user_id (Foreign Key)
-  - job_title, company_name, location, job_description, job_url
-  - match_percentage, scraping_date
-- [x] Database utilities created (utils/database.py)
-- [x] CRUD operations implemented
-- [x] Proper indexing on user_id and email
-- [x] Data validation rules
+#### **2. Weaknesses Analysis**
 
-#### ✅ Task 3: Build User Registration Page (Frontend)
+- Identifies 5-7 key weaknesses
+- Categories: formatting, content, skills, experience, missing_info, grammar, gaps
+- Severity levels: critical, moderate, minor
+- Location information (which section has the issue)
+- Impact assessment on candidacy
+- Specific fix recommendations
 
-**Status**: COMPLETED
+#### **3. Skills Extraction**
 
-- [x] Registration form created (frontend/registration.py)
-- [x] Input fields: Full Name, Email, Password, Confirm Password
-- [x] Real-time input validation
-  - Name: letters only, non-empty
-  - Email: proper format with regex
-  - Password: 8+ chars, uppercase, lowercase, number, special char
-  - Confirm Password: must match
-- [x] Error messages displayed
-- [x] Register button functionality
-- [x] Link to login page
+- Automatic detection of technical & soft skills
+- Categorization by skill type
+- JSON-structured output for integration
 
-#### ✅ Task 4: Implement User Authentication Backend
+#### **4. Job Matching**
 
-**Status**: COMPLETED
+- Compare resume against job descriptions
+- Match percentage calculation
+- Gap analysis with recommendations
 
-- [x] Authentication module (backend/auth.py)
-- [x] Registration function with:
-  - Email duplicate check
-  - bcrypt password hashing
-  - User data storage
-- [x] Login function with:
-  - User retrieval by email
-  - Password verification with bcrypt
-  - Session creation
-- [x] Session management using st.session_state
-- [x] Helper functions (is_user_logged_in, logout_user, get_current_user_name)
-- [x] Error handling for database and validation
+### Architecture
 
-#### ✅ Task 5: Build Resume Upload Interface (Frontend)
+**Backend Components:**
 
-**Status**: COMPLETED
+1. **Enhanced LLMAnalyzer** (`backend/llm_analyzer.py`)
 
-- [x] Resume upload section in dashboard
-- [x] File uploader (PDF and DOCX only)
-- [x] File validation:
-  - Size limit: 5MB
-  - Extensions: .pdf, .docx only
-  - File corruption check
-- [x] Upload progress indicator
-- [x] Success message display
-- [x] File details preview (name, size)
-- [x] Unique file naming (user_id + timestamp)
-- [x] File storage in data/resumes/
+   - `AnalysisCache` class for intelligent caching with SHA-256 hashing
+   - Specialized prompts for strength/weakness identification
+   - Token tracking and retry logic with exponential backoff
+   - Methods: `get_strengths()`, `get_weaknesses()`, `get_skills()`, `get_improvements()`, `match_job()`
 
-#### ✅ Task 6: Implement Resume Text Extraction (Backend)
+2. **Database Integration** (`utils/database.py`)
 
-**Status**: COMPLETED
+   - `save_resume_analysis()` - Store analysis results with JSON serialization
+   - `get_user_analysis()` - Retrieve user's latest analysis
+   - Enhanced schema with strengths/weaknesses JSON fields
 
-- [x] Resume parser module (backend/resume_parser.py)
-- [x] PDF text extraction with PyPDF2
-- [x] DOCX text extraction with python-docx
-- [x] Unified extraction function
-- [x] Text cleaning (whitespace, special characters)
-- [x] Error handling (corrupted files, password-protected PDFs)
-- [x] Database storage of extracted text
-- [x] Logging for tracking operations
+3. **Frontend Display** (`frontend/resume_analysis.py`)
+   - Rich visual display with color-coded indicators
+   - Support for all analysis types
+   - Cache status indicator (⚡ badge)
+   - Automatic database storage on completion
 
-#### ✅ Task 7: Create User Dashboard (Frontend)
+### Caching System
 
-**Status**: COMPLETED
+- **Two-level caching**: Memory (fast) + Disk (persistent)
+- **SHA-256 hashing** for resume fingerprinting
+- **~100x speedup** for re-analyzed resumes
+- Automatic cache lookup before LLM calls
 
-- [x] Main dashboard page (frontend/dashboard.py)
-- [x] Welcome header with username
-- [x] Navigation menu (sidebar)
-- [x] Quick stats section:
-  - Resume upload status
-  - Last analysis date
-  - Job recommendations count
-- [x] Session state management
-- [x] Login check and redirect
-- [x] Navigation to other pages
-- [x] Call-to-action buttons
+### Usage Example
+
+1. Navigate to **Resume Analysis** in the dashboard
+2. Select analysis type (Strengths, Weaknesses, etc.)
+3. (Optional) Provide job description for job matching
+4. Click analyze - results display with confidence scores
+5. Results automatically saved to database and cached
+
+---
+
+## LLM Setup
+
+### Environment Configuration (.env)
+
+The application uses the following LLM configuration:
+
+```env
+OLLAMA_HOST=http://localhost:11434
+LLM_MODEL=llama
+LLM_TEMPERATURE=0.7
+LLM_MAX_TOKENS=2000
+LLM_TIMEOUT=60
+LLM_MAX_RETRIES=3
+```
+
+### Supported Models
+
+- **llama** (recommended) - 7B parameter model, good balance of speed/quality
+- **mistral** - Faster alternative, good for quick analyses
+- Custom models - Any Ollama-compatible model can be used
+
+### Dependencies
+
+All LLM integration packages are in `requirements.txt`:
+
+- langchain
+- langchain-community
+- ollama
+- requests
+- python-dotenv
+
+### Completed Features
+
+✅ User authentication with bcrypt password hashing
+✅ Resume upload & text extraction (PDF/DOCX)
+✅ Resume analysis with AI-powered strengths & weaknesses detection
+✅ Intelligent caching system for performance
+✅ Database storage with JSON serialization
+✅ User dashboard with navigation
+✅ Profile management & settings pages
+✅ Job recommendations engine
+✅ Token tracking & retry logic
 
 ## Database Schema
 
