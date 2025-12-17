@@ -1,94 +1,186 @@
 {
   "strengths": {
-    "summary": "The candidate has a strong educational background in computer science and electronics, with relevant coursework and hands-on experience in backend development, systems programming, IoT, and government IT operations.",
+    "summary": "The resume showcases a strong foundation in computer science and engineering with relevant experience in backend development, systems programming, IoT, and government IT operations.",
     "items": [
       {
-        "strength": "Strong foundation in electronics, networking, and low-level programming",
-        "category": "education|experience",
-        "importance": "high",
+        "strength": "Clear formatting",
+        "category": "formatting",
+        "importance": "critical",
         "confidence": 90,
         "examples": [
-          "E.K. Nayanar Memorial Model Polytechnic College diploma: 8.77 CGPA"
-        ]
+          "Professional Summary",
+          "Technical Skills sections"
+        ],
+        "location": "Summary and Technical Skills sections"
       },
       {
-        "strength": "Hands-on experience in backend development, systems programming, IoT, and government IT operations",
+        "strength": "Relevant experience in backend development and systems programming",
         "category": "experience|skills",
         "importance": "high",
-        "confidence": 90,
+        "confidence": 95,
         "examples": [
-          "Infosys Springboard Virtual Internship: Developing a Resume Analysis and Job Recommendation system"
-        ]
+          "Remote Software Development Intern at Infosys Springboard",
+          "Network Supervisor & Digital Signature Project Coordinator at KELTRON"
+        ],
+        "location": "Work Experience section"
+      },
+      {
+        "strength": "Quantifiable achievements in IoT and government IT operations",
+        "category": "experience|achievements",
+        "importance": "medium",
+        "confidence": 80,
+        "examples": [
+          "Implemented authentication with bcrypt, SQLite3, and LangChain-based resume parsing"
+        ],
+        "location": "Work Experience section"
+      },
+      {
+        "strength": "Strong educational background in Electronics and Communication Engineering",
+        "category": "education",
+        "importance": "medium",
+        "confidence": 85,
+        "examples": [
+          "Diploma \u2013 Electronics and Communication Engineering (CGPA: 8.77)"
+        ],
+        "location": "Education section"
+      },
+      {
+        "strength": "Domain expertise in IoT systems and network supervision",
+        "category": "skills|experience",
+        "importance": "medium",
+        "confidence": 75,
+        "examples": [
+          "Smart Home Automation \u2013 Habitat",
+          "Rumbly (Run Assembly) \u2013 NASM Code Execution Platform"
+        ],
+        "location": "Projects section"
+      },
+      {
+        "strength": "Action verbs used effectively in Work Experience and Projects sections",
+        "category": "formatting|content",
+        "importance": "medium",
+        "confidence": 70,
+        "examples": [
+          "Managed IT and network operations",
+          "Developing a Resume Analysis and Job Recommendation system"
+        ],
+        "location": "Work Experience section"
+      },
+      {
+        "strength": "Relevant certifications not explicitly mentioned",
+        "category": "certifications",
+        "importance": "low",
+        "confidence": 60,
+        "examples": [],
+        "location": "N/A"
       }
     ]
   },
   "weaknesses": {
-    "summary": "The candidate could benefit from more specific achievements in their experience section, as some of the descriptions are quite general.",
+    "summary": "Some areas for improvement include missing contact information, poor formatting in certain sections, and lack of quantifiable achievements.",
     "items": [
       {
-        "weakness": "Lack of specificity in experience descriptions",
-        "category": "experience|content",
-        "severity": "moderate",
-        "location": "KELTRON Network Supervisor & Digital Signature Project Coordinator 2023",
-        "impact": "May make it harder for the candidate to stand out from others with similar experience.",
-        "fix": "Provide more specific examples of accomplishments and challenges overcome in each role.",
+        "weakness": "Missing contact information",
+        "category": "formatting|content",
+        "severity": "critical",
+        "location": "Contact Information section",
+        "impact": "Difficulty for employers to get in touch with the candidate",
+        "fix": "Add a professional email address, phone number, and LinkedIn profile link.",
         "confidence": 80,
+        "examples": []
+      },
+      {
+        "weakness": "Poor formatting in Summary section",
+        "category": "formatting|content",
+        "severity": "minor",
+        "location": "Summary section",
+        "impact": "Difficulty for employers to quickly grasp the candidate's background and experience.",
+        "fix": "Improve bullet points, use clear language, and add relevant keywords.",
+        "confidence": 60,
         "examples": [
-          "KELTRON Network Supervisor & Digital Signature Project Coordinator 2023: Managed IT and network operations"
+          "Professional Summary"
         ]
       },
       {
-        "weakness": "Missing information on relevant projects",
+        "weakness": "Lack of quantifiable achievements",
+        "category": "experience|achievements",
+        "severity": "moderate",
+        "location": "Work Experience section",
+        "impact": "Difficulty for employers to evaluate the candidate's performance and impact.",
+        "fix": "Add specific numbers, metrics, or percentages to describe achievements.",
+        "confidence": 70,
+        "examples": []
+      },
+      {
+        "weakness": "Irrelevant information in Projects section",
         "category": "projects|content",
         "severity": "minor",
-        "location": "Smart Home Automation \u2013 Habitat (ESP32, Tasmota, Flutter)",
-        "impact": "May make it harder for the candidate to showcase their skills and experience.",
-        "fix": "Include more details about each project, such as technologies used and achievements.",
-        "confidence": 70,
+        "location": "Projects section",
+        "impact": "Distraction from relevant projects and experience.",
+        "fix": "Remove unrelated information, focus on showcasing relevant skills and achievements.",
+        "confidence": 50,
         "examples": [
-          "Smart Home Automation \u2013 Habitat (ESP32, Tasmota, Flutter): Built an IoT-based home automation system"
+          "Smart Car Parking System"
         ]
+      },
+      {
+        "weakness": "Unexplained employment gap in Work Experience section",
+        "category": "formatting|content",
+        "severity": "low",
+        "location": "Work Experience section",
+        "impact": "Minor concern, but may require further clarification.",
+        "fix": "Add a brief explanation for the employment gap, if necessary.",
+        "confidence": 40,
+        "examples": []
+      },
+      {
+        "weakness": "Relevant skills for target role not explicitly mentioned",
+        "category": "skills|content",
+        "severity": "low",
+        "location": "Skills section",
+        "impact": "Minor concern, but may require further clarification.",
+        "fix": "Add relevant skills for the target role, if necessary.",
+        "confidence": 30,
+        "examples": []
       }
     ]
   },
   "skills": {
-    "summary": "The candidate has a strong technical skill profile, with expertise in backend development, systems programming, and IoT.",
+    "summary": "The candidate has a solid foundation in computer science and engineering with expertise in backend development, systems programming, IoT, and networking.",
     "technical": [
       {
         "skill": "Python",
-        "proficiency": "advanced",
-        "mentioned_context": "Developing a Resume Analysis and Job Recommendation system using Python and Streamlit"
+        "proficiency": "advanced"
       },
       {
         "skill": "Node.js",
-        "proficiency": "intermediate",
-        "mentioned_context": "Rumbly (Run Assembly) \u2013 NASM Code Execution Platform"
+        "proficiency": "intermediate"
       }
     ],
     "soft_skills": [
       {
         "skill": "Leadership",
-        "proficiency": "intermediate",
-        "mentioned_context": ""
+        "proficiency": "intermediate"
       }
     ]
   },
   "suggestions": {
-    "summary": "The candidate should focus on providing more specific achievements and details about their projects to make their resume stand out.",
+    "summary": "To further improve, the candidate should focus on clarifying employment gaps, adding quantifiable achievements, and tailoring their skills to the target role.",
     "priority_improvements": [
       {
-        "improvement": "Provide more specific examples of accomplishments and challenges overcome in each role",
+        "improvement": "Add a professional email address, phone number, and LinkedIn profile link in Contact Information section",
         "priority": "high",
-        "impact": "Improved credibility and competitiveness",
-        "timeline": "Within the next 2 weeks"
+        "impact": "Improved contact information for employers.",
+        "timeline": "Immediate action required"
       },
       {
-        "improvement": "Include more details about each project, such as technologies used and achievements",
+        "improvement": "Improve bullet points, use clear language, and add relevant keywords in Summary section",
         "priority": "medium",
-        "impact": "Enhanced visibility of skills and experience",
-        "timeline": "Within the next month"
+        "impact": "Improved summary for quick grasping of background and experience.",
+        "timeline": "Short-term improvement"
       }
     ]
   },
-  "cached": false
+  "cached": false,
+  "overall_score": 85
 }

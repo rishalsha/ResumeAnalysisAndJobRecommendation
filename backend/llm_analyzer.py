@@ -324,16 +324,26 @@ Rules:
     
     def get_skills_extraction_prompt(self, resume_text: str) -> str:
         """Generate prompt for extracting skills."""
-        return f"""You are an expert resume analyst. Extract all technical and soft skills from the resume.
+        return f"""You are an expert resume analyst. Carefully extract ALL technical and soft skills from the resume below.
+
+IMPORTANT: Extract EVERY skill mentioned, implied, or demonstrated throughout the entire resume including:
+- Programming languages, frameworks, tools, technologies
+- Software, platforms, and systems
+- Methodologies and practices (Agile, DevOps, CI/CD, etc.)
+- Domain expertise and industry knowledge
+- Soft skills like leadership, communication, problem-solving
+- Skills demonstrated in projects, work experience, and achievements
+- Certifications and specialized training
+
+Be thorough and comprehensive - aim to extract at least 10-20 skills if present in the resume.
 
 Resume:
 {resume_text}
 
 Provide your analysis as a JSON object with the following structure:
-{{"technical_skills": ["skill1", "skill2", ...], "soft_skills": ["skill1", "skill2", ...]}}
+{{"technical_skills": ["skill1", "skill2", "skill3", ...], "soft_skills": ["skill1", "skill2", "skill3", ...]}}
 
-Categorize skills appropriately.
-Return ONLY valid JSON, no additional text."""
+Include all relevant skills found. Return ONLY valid JSON, no additional text."""
     
     def get_improvement_suggestions_prompt(self, resume_text: str) -> str:
         """Generate prompt for improvement suggestions."""
@@ -707,10 +717,10 @@ Return a JSON object with this exact structure (no markdown, pure JSON):
     "skills": {{
         "summary": "overview of skill profile",
         "technical": [
-            {{"skill": "Python", "proficiency": "advanced", "mentioned_context": "where in resume"}}
+            {{"skill": "Python", "proficiency": "advanced|intermediate|beginner", "mentioned_context": "where in resume"}}
         ],
         "soft_skills": [
-            {{"skill": "Leadership", "proficiency": "intermediate", "mentioned_context": "where in resume"}}
+            {{"skill": "Leadership", "proficiency": "advanced|intermediate|beginner", "mentioned_context": "where in resume"}}
         ]
     }},
     "suggestions": {{
@@ -730,6 +740,7 @@ Rules:
 - Return 5-7 strengths and 5-7 weaknesses; sort items by importance/severity (highest first). Do not leave lists empty; if evidence is weak, provide best-effort items with low confidence and note the uncertainty.
 - For strengths, explicitly consider: clear formatting, relevant experience, quantifiable achievements, action verbs, relevant certifications, strong educational background, domain expertise.
 - For weaknesses, explicitly consider: missing contact info, spelling/grammar errors, lack of quantifiable achievements, irrelevant info, poor formatting, missing key skills for target role, unexplained employment gaps.
+- For skills: EXTRACT ALL SKILLS mentioned in the resume including programming languages, frameworks, tools, databases, platforms, methodologies, soft skills, domain expertise, certifications, and technologies. Look in Technical Skills section, projects, work experience, and education. Aim for 15-40+ skills total across technical and soft skills. Be comprehensive and thorough.
 - Provide examples and locations when available. Use confidence 0-100.
 - Ensure valid JSON only."""
 
