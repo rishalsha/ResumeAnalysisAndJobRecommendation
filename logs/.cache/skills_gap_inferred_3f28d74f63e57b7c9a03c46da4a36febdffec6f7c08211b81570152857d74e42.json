@@ -1,0 +1,410 @@
+{
+  "summary": {
+    "total_skills_found": 36,
+    "matching_must_have": 14,
+    "missing_critical": 8,
+    "strength_areas": [
+      "Docker",
+      "Git",
+      "GitHub",
+      "JavaScript",
+      "SQL"
+    ],
+    "gap_areas": [
+      "Spring Boot",
+      "REST APIs",
+      "Flutter",
+      "React",
+      "NASM Assembly",
+      "Network supervision"
+    ],
+    "readiness_score": 70
+  },
+  "present_skills": [
+    {
+      "skill": "Python",
+      "category": "Technical",
+      "proficiency": "advanced",
+      "matches_requirement": true
+    },
+    {
+      "skill": "Node.js",
+      "category": "Technical",
+      "proficiency": "intermediate",
+      "matches_requirement": true
+    },
+    {
+      "skill": "Streamlit",
+      "category": "Technical",
+      "proficiency": "advanced",
+      "matches_requirement": true
+    },
+    {
+      "skill": "SQL",
+      "category": "Technical",
+      "proficiency": "intermediate",
+      "matches_requirement": true
+    },
+    {
+      "skill": "JavaScript",
+      "category": "Technical",
+      "proficiency": "beginner",
+      "matches_requirement": false
+    },
+    {
+      "skill": "NASM Assembly",
+      "category": "Technical",
+      "proficiency": "advanced",
+      "matches_requirement": true
+    },
+    {
+      "skill": "IoT systems",
+      "category": "Technical",
+      "proficiency": "intermediate",
+      "matches_requirement": true
+    },
+    {
+      "skill": "Network supervision",
+      "category": "Technical",
+      "proficiency": "advanced",
+      "matches_requirement": true
+    },
+    {
+      "skill": "Docker",
+      "category": "Technical",
+      "proficiency": "beginner",
+      "matches_requirement": false
+    },
+    {
+      "skill": "Git",
+      "category": "Technical",
+      "proficiency": "intermediate",
+      "matches_requirement": true
+    },
+    {
+      "skill": "GitHub",
+      "category": "Technical",
+      "proficiency": "advanced",
+      "matches_requirement": true
+    },
+    {
+      "skill": "Flutter",
+      "category": "Technical",
+      "proficiency": "intermediate",
+      "matches_requirement": false
+    },
+    {
+      "skill": "React",
+      "category": "Technical",
+      "proficiency": "beginner",
+      "matches_requirement": false
+    },
+    {
+      "skill": "Spring Boot",
+      "category": "Technical",
+      "proficiency": "beginner",
+      "matches_requirement": false
+    },
+    {
+      "skill": "REST APIs",
+      "category": "Technical",
+      "proficiency": "advanced",
+      "matches_requirement": false
+    }
+  ],
+  "missing_critical_skills": [
+    {
+      "skill": "Spring Boot",
+      "category": "Technical",
+      "priority": "high",
+      "typical_learning_time": "3-6 months",
+      "why_important": "Required for backend development"
+    },
+    {
+      "skill": "REST APIs",
+      "category": "Technical",
+      "priority": "high",
+      "typical_learning_time": "3-6 months",
+      "why_important": "Required for API development"
+    },
+    {
+      "skill": "Flutter",
+      "category": "Technical",
+      "priority": "medium",
+      "typical_learning_time": "1-3 months",
+      "why_important": "Popular framework for mobile app development"
+    },
+    {
+      "skill": "React",
+      "category": "Technical",
+      "priority": "medium",
+      "typical_learning_time": "1-3 months",
+      "why_important": "Popular front-end framework"
+    }
+  ],
+  "missing_nice_to_have_skills": [
+    {
+      "skill": "Docker",
+      "category": "Technical",
+      "priority": "low",
+      "typical_learning_time": "1-2 months",
+      "why_important": "Useful for containerization, but not essential"
+    },
+    {
+      "skill": "Git",
+      "category": "Technical",
+      "priority": "medium",
+      "typical_learning_time": "1-2 months",
+      "why_important": "Essential for version control, but can be learned on the job"
+    }
+  ],
+  "skill_recommendations": [
+    {
+      "skill": "Spring Boot",
+      "category": "Technical",
+      "priority": "high",
+      "why_learn": "In-demand for backend development, improves scalability and performance",
+      "current_demand": "very_high",
+      "difficulty": "intermediate",
+      "estimated_learning_time": "3-6 months",
+      "prerequisites": [
+        "Java"
+      ],
+      "learning_path": [
+        "Spring Boot tutorial",
+        " Spring Boot course"
+      ],
+      "resources": [
+        {
+          "type": "course",
+          "name": "Spring Boot tutorial",
+          "url": "https://www.springboottutorial.com/"
+        },
+        {
+          "type": "documentation",
+          "name": "Spring Boot documentation",
+          "url": "https://docs spring.io/spring-boot/docs/current/reference.html"
+        }
+      ],
+      "use_cases": [
+        "Building scalable backend APIs"
+      ]
+    },
+    {
+      "skill": "REST APIs",
+      "category": "Technical",
+      "priority": "high",
+      "why_learn": "In-demand for API development, improves scalability and performance",
+      "current_demand": "very_high",
+      "difficulty": "intermediate",
+      "estimated_learning_time": "3-6 months",
+      "prerequisites": [
+        "Java"
+      ],
+      "learning_path": [
+        "RESTful API tutorial",
+        " REST API course"
+      ],
+      "resources": [
+        {
+          "type": "course",
+          "name": "RESTful API tutorial",
+          "url": "https://www.restfulapitutorial.com/"
+        },
+        {
+          "type": "documentation",
+          "name": "REST API documentation",
+          "url": "https://restful-api-design.readthedocs.io/en/latest/"
+        }
+      ],
+      "use_cases": [
+        "Building scalable backend APIs"
+      ]
+    },
+    {
+      "skill": "Flutter",
+      "category": "Technical",
+      "priority": "medium",
+      "why_learn": "Popular framework for mobile app development, improves performance and user experience",
+      "current_demand": "high",
+      "difficulty": "intermediate",
+      "estimated_learning_time": "1-3 months",
+      "prerequisites": [
+        "Dart"
+      ],
+      "learning_path": [
+        "Flutter tutorial",
+        " Flutter course"
+      ],
+      "resources": [
+        {
+          "type": "course",
+          "name": "Flutter tutorial",
+          "url": "https://flutter.dev/docs/get-started/codelab"
+        },
+        {
+          "type": "documentation",
+          "name": "Flutter documentation",
+          "url": "https://docs.flutter.io"
+        }
+      ],
+      "use_cases": [
+        "Building mobile apps with Flutter"
+      ]
+    },
+    {
+      "skill": "React",
+      "category": "Technical",
+      "priority": "medium",
+      "why_learn": "Popular front-end framework, improves performance and user experience",
+      "current_demand": "high",
+      "difficulty": "intermediate",
+      "estimated_learning_time": "1-3 months",
+      "prerequisites": [
+        "JavaScript"
+      ],
+      "learning_path": [
+        "React tutorial",
+        " React course"
+      ],
+      "resources": [
+        {
+          "type": "course",
+          "name": "React tutorial",
+          "url": "https://reactjs.org/tutorial/tutorial.html"
+        },
+        {
+          "type": "documentation",
+          "name": "React documentation",
+          "url": "https://reactjs.org/docs/getting-started.html"
+        }
+      ],
+      "use_cases": [
+        "Building front-end applications with React"
+      ]
+    }
+  ],
+  "learning_roadmap": {
+    "immediate_focus": [
+      "Spring Boot"
+    ],
+    "short_term": [
+      "REST APIs"
+    ],
+    "long_term": [
+      "Flutter",
+      "React"
+    ]
+  },
+  "visualization_data": {
+    "skills_by_category": {
+      "Technical": 32,
+      "Soft Skills": 1
+    },
+    "proficiency_distribution": {
+      "advanced": 9,
+      "intermediate": 16,
+      "beginner": 11
+    },
+    "gap_severity": {
+      "critical": 8,
+      "moderate": 4,
+      "minor": 0
+    }
+  },
+  "target_role": "Professional",
+  "experience_level": "mid",
+  "analysis_date": "2025-12-17T22:37:44.023188",
+  "extracted_skills": {
+    "summary": "Muhammad Rishal P Kannur has a diverse skill set, including programming languages, frameworks, tools, databases, platforms, methodologies, soft skills, domain expertise, certifications, and technologies.",
+    "technical": [
+      {
+        "skill": "Python",
+        "proficiency": "advanced",
+        "mentioned_context": "Resume Analysis and Job Recommendation system"
+      },
+      {
+        "skill": "Node.js",
+        "proficiency": "intermediate",
+        "mentioned_context": "Backend & Systems"
+      },
+      {
+        "skill": "Spring Boot",
+        "proficiency": "beginner",
+        "mentioned_context": "Backend & Systems"
+      },
+      {
+        "skill": "REST APIs",
+        "proficiency": "advanced",
+        "mentioned_context": "Backend & Systems"
+      },
+      {
+        "skill": "Flutter",
+        "proficiency": "intermediate",
+        "mentioned_context": "Smart Home Automation \u2013 Habitat"
+      },
+      {
+        "skill": "React",
+        "proficiency": "beginner",
+        "mentioned_context": "Frontend"
+      },
+      {
+        "skill": "Streamlit",
+        "proficiency": "advanced",
+        "mentioned_context": "Resume Analysis and Job Recommendation system"
+      },
+      {
+        "skill": "SQL",
+        "proficiency": "intermediate",
+        "mentioned_context": "Databases"
+      },
+      {
+        "skill": "JavaScript",
+        "proficiency": "beginner",
+        "mentioned_context": "Frontend"
+      },
+      {
+        "skill": "NASM Assembly",
+        "proficiency": "advanced",
+        "mentioned_context": "Rumbly (Run Assembly)"
+      },
+      {
+        "skill": "IoT systems",
+        "proficiency": "intermediate",
+        "mentioned_context": "Networking, IoT & Security"
+      },
+      {
+        "skill": "Network supervision",
+        "proficiency": "advanced",
+        "mentioned_context": "Networking, IoT & Security"
+      },
+      {
+        "skill": "Docker",
+        "proficiency": "beginner",
+        "mentioned_context": "DevOps & OS"
+      },
+      {
+        "skill": "Git",
+        "proficiency": "intermediate",
+        "mentioned_context": "DevOps & OS"
+      },
+      {
+        "skill": "GitHub",
+        "proficiency": "advanced",
+        "mentioned_context": "DevOps & OS"
+      }
+    ],
+    "soft_skills": [
+      {
+        "skill": "Leadership",
+        "proficiency": "advanced",
+        "mentioned_context": ""
+      },
+      {
+        "skill": "Communication",
+        "proficiency": "intermediate",
+        "mentioned_context": ""
+      }
+    ]
+  }
+}

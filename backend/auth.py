@@ -44,3 +44,9 @@ def get_current_user_name():
     if is_user_logged_in():
         return st.session_state['user_name']
     return None
+
+def get_logged_in_user_id():
+    """Returns the ID of the currently logged-in user."""
+    if is_user_logged_in():
+        return st.session_state.get('user_id')
+    return None

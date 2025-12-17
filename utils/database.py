@@ -64,6 +64,26 @@ def create_tables():
     """)
     # Ensure one analysis row per user
     cursor.execute("CREATE UNIQUE INDEX IF NOT EXISTS idx_resume_analysis_user_unique ON resume_analysis (user_id)")
+    
+    # Skills gap analysis table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS skills_gap_analysis (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        target_role TEXT NOT NULL,
+        experience_level TEXT DEFAULT 'mid',
+        extracted_skills TEXT,
+        industry_skills TEXT,
+        missing_critical_skills TEXT,
+        missing_nice_to_have TEXT,
+        skill_recommendations TEXT,
+        readiness_score INTEGER,
+        analysis_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+    """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_skills_gap_user ON skills_gap_analysis (user_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_skills_gap_date ON skills_gap_analysis (analysis_date)")
 
     cursor.execute("""
     CREATE TABLE IF NOT EXISTS job_recommendations (
@@ -202,6 +222,87 @@ def get_user_analysis(user_id):
     except Exception as e:
         logger.error(f"Error retrieving analysis: {e}")
         return None
+    finally:
+        conn.close()
+
+def save_skills_gap_analysis(user_id, target_role, experience_level, gap_analysis_data):
+    """Save skills gap analysis to database."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        extracted_skills_json = json.dumps(gap_analysis_data.get("extracted_skills", {}))
+        industry_skills_json = json.dumps(gap_analysis_data.get("industry_skills", {}))
+        missing_critical_json = json.dumps(gap_analysis_data.get("missing_critical_skills", []))
+        missing_nice_json = json.dumps(gap_analysis_data.get("missing_nice_to_have", []))
+        recommendations_json = json.dumps(gap_analysis_data.get("skill_recommendations", []))
+        readiness_score = gap_analysis_data.get("summary", {}).get("readiness_score", 0)
+        
+        cursor.execute("""
+            INSERT INTO skills_gap_analysis 
+            (user_id, target_role, experience_level, extracted_skills, industry_skills,
+             missing_critical_skills, missing_nice_to_have, skill_recommendations, readiness_score)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            user_id,
+            target_role,
+            experience_level,
+            extracted_skills_json,
+            industry_skills_json,
+            missing_critical_json,
+            missing_nice_json,
+            recommendations_json,
+            readiness_score
+        ))
+        conn.commit()
+        analysis_id = cursor.lastrowid
+        logger.info(f"Skills gap analysis saved for user {user_id}, ID: {analysis_id}")
+        return analysis_id
+    except Exception as e:
+        logger.error(f"Error saving skills gap analysis: {e}")
+        return None
+    finally:
+        conn.close()
+
+def get_skills_gap_analysis(user_id, limit=1):
+    """Retrieve skills gap analysis for a user."""
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("""
+            SELECT id, target_role, experience_level, extracted_skills, industry_skills,
+                   missing_critical_skills, missing_nice_to_have, skill_recommendations,
+                   readiness_score, analysis_date
+            FROM skills_gap_analysis
+            WHERE user_id = ?
+            ORDER BY analysis_date DESC
+            LIMIT ?
+        """, (user_id, limit))
+        
+        rows = cursor.fetchall()
+        if not rows:
+            return [] if limit > 1 else None
+        
+        results = []
+        for row in rows:
+            results.append({
+                "id": row[0],
+                "target_role": row[1],
+                "experience_level": row[2],
+                "extracted_skills": json.loads(row[3]) if row[3] else {},
+                "industry_skills": json.loads(row[4]) if row[4] else {},
+                "missing_critical_skills": json.loads(row[5]) if row[5] else [],
+                "missing_nice_to_have": json.loads(row[6]) if row[6] else [],
+                "skill_recommendations": json.loads(row[7]) if row[7] else [],
+                "readiness_score": row[8],
+                "analysis_date": row[9]
+            })
+        
+        return results if limit > 1 else results[0]
+    except Exception as e:
+        logger.error(f"Error retrieving skills gap analysis: {e}")
+        return [] if limit > 1 else None
     finally:
         conn.close()
 

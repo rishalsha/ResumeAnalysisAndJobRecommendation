@@ -1,0 +1,254 @@
+{
+  "raw_response": "{\n  \"skill_recommendations\": [\n    {\n      \"skill\": \"Kubernetes\",\n      \"priority\": \"high\",\n      \"category\": \"tool\",\n      \"why_learn\": \"Industry standard for container orchestration\",\n      \"current_demand\": \"very high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"4-8 weeks\",\n      \"prerequisites\": [\"Docker\", \"Linux\"],\n      \"learning_path\": [\"Start with Docker\", \"Learn K8s concepts\", \"Practice with minikube\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"Kubernetes for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official K8s Docs\", \"url\": \"kubernetes.io\"},\n        {\"type\": \"practice\", \"name\": \"KodeKloud Labs\", \"url\": \"example.com\"}\n      ],\n      \"use_cases\": [\"Deploy microservices\", \"Scale applications\", \"Manage containers\"]\n    },\n    {\n      \"skill\": \"TypeScript\",\n      \"priority\": \"high\",\n      \"category\": \"programming_language\",\n      \"why_learn\": \"Widely adopted in modern web development\",\n      \"current_demand\": \"very high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"2-4 weeks\",\n      \"prerequisites\": [],\n      \"learning_path\": [\"Start with JavaScript\", \"Learn TypeScript basics\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"TypeScript for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official TypeScript Docs\", \"url\": \"typescriptlang.org\"}\n      ],\n      \"use_cases\": [\"Build complex applications\", \"Work with large codebases\"]\n    },\n    {\n      \"skill\": \"GraphQL\",\n      \"priority\": \"medium\",\n      \"category\": \"framework\",\n      \"why_learn\": \"Modern API standard\",\n      \"current_demand\": \"high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"1-2 weeks\",\n      \"prerequisites\": [\"JavaScript\", \"Familiarity with APIs\"],\n      \"learning_path\": [\"Start with GraphQL basics\", \"Learn about schema design\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"GraphQL for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official GraphQL Docs\", \"url\": \"graphql.org\"}\n      ],\n      \"use_cases\": [\"Build robust APIs\", \"Work with data queries\"]\n    },\n    {\n      \"skill\": \"Babel\",\n      \"priority\": \"high\",\n      \"category\": \"tool\",\n      \"why_learn\": \"Essential for modern JavaScript development\",\n      \"current_demand\": \"very high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"2-4 weeks\",\n      \"prerequisites\": [\"JavaScript\"],\n      \"learning_path\": [\"Start with Babel basics\", \"Learn about transpilation\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"Babel for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official Babel Docs\", \"url\": \"babeljs.io\"}\n      ],\n      \"use_cases\": [\"Work with modern JavaScript codebases\", \"Transpile older code to ES6\"]\n    },\n    {\n      \"skill\": \"Docker\",\n      \"priority\": \"high\",\n      \"category\": \"tool\",\n      \"why_learn\": \"Essential for container orchestration\",\n      \"current_demand\": \"very high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"2-4 weeks\",\n      \"prerequisites\": [\"Linux\", \"Basic understanding of containers\"],\n      \"learning_path\": [\"Start with Docker basics\", \"Learn about containerization concepts\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"Docker for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official Docker Docs\", \"url\": \"docker.com\"}\n      ],\n      \"use_cases\": [\"Deploy containers\", \"Manage container lifecycle\"]\n    },\n    {\n      \"skill\": \"LangChain\",\n      \"priority\": \"medium\",\n      \"category\": \"framework\",\n      \"why_learn\": \"Growing adoption in the industry\",\n      \"current_demand\": \"high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"1-2 weeks\",\n      \"prerequisites\": [\"JavaScript\", \"Familiarity with data structures\"],\n      \"learning_path\": [\"Start with LangChain basics\", \"Learn about graph neural networks\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"LangChain for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official LangChain Docs\", \"url\": \"langchain.dev\"}\n      ],\n      \"use_cases\": [\"Build graph-based applications\", \"Work with complex data structures\"]\n    },\n    {\n      \"skill\": \"PostgreSQL\",\n      \"priority\": \"high\",\n      \"category\": \"database\",\n      \"why_learn\": \"Widely adopted in modern web development\",\n      \"current_demand\": \"very high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"2-4 weeks\",\n      \"prerequisites\": [],\n      \"learning_path\": [\"Start with PostgreSQL basics\", \"Learn about SQL fundamentals\"],\n      \"resources\": [\n        {\"type\": \"course\", \"name\": \"PostgreSQL for Beginners\", \"url\": \"example.com\", \"cost\": \"free|paid\"},\n        {\"type\": \"documentation\", \"name\": \"Official PostgreSQL Docs\", \"url\": \"postgresql.org\"}\n      ],\n      \"use_cases\": [\"Build robust data-driven applications\", \"Work with complex queries\"]\n    },\n    {\n      \"skill\": \"KodeKloud Labs\",\n      \"priority\": \"medium\",\n      \"category\": \"practice\",\n      \"why_learn\": \"Hands-on experience with real-world projects\",\n      \"current_demand\": \"high\",\n      \"difficulty\": \"intermediate\",\n      \"estimated_learning_time\": \"1-2 weeks\",\n      \"prerequisites\": [\"Basic understanding of web development\"],\n      \"learning_path\": [\"Start with KodeKloud Labs basics\", \"Learn about project-based learning\"],\n      \"resources\": [\n        {\"type\": \"practice\", \"name\": \"KodeKloud Labs\", \"url\": \"example.com\"}\n      ],\n      \"use_cases\": [\"Build real-world projects\", \"Gain hands-on experience\"]\n    }\n  ]",
+  "target_role": "Frontend Dev",
+  "experience_level": "mid",
+  "analysis_date": "2025-12-17T22:27:25.079966",
+  "extracted_skills": {
+    "programming_languages": [
+      {
+        "name": "Python",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in 4 projects"
+      },
+      {
+        "name": "C",
+        "proficiency": "beginner",
+        "years_experience": "1",
+        "context": "Used in educational projects"
+      },
+      {
+        "name": "Java",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Used in backend development"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in web development"
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "Node.js",
+        "proficiency": "advanced",
+        "years_experience": "2",
+        "context": "Used in backend projects"
+      },
+      {
+        "name": "Express.js",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used in backend development"
+      },
+      {
+        "name": "Spring Boot",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used in backend projects"
+      },
+      {
+        "name": "React",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Frontend development"
+      }
+    ],
+    "tools": [
+      {
+        "name": "Docker",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "DevOps work"
+      },
+      {
+        "name": "Git",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in version control"
+      },
+      {
+        "name": "GitHub",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in version control"
+      },
+      {
+        "name": "Neovim",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used as an editor"
+      }
+    ],
+    "databases": [
+      {
+        "name": "SQLite",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in backend projects"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used in backend development"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in database administration"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Backend projects"
+      }
+    ],
+    "platforms": [
+      {
+        "name": "ESP32",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in IoT projects"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Cloud deployment"
+      }
+    ],
+    "methodologies": [
+      {
+        "name": "Agile",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Team development"
+      },
+      {
+        "name": "Sandboxed Execution",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in Rumbly project"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "Leadership",
+        "proficiency": "intermediate",
+        "context": "Led team of 3 developers"
+      },
+      {
+        "name": "Communication",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in teamwork"
+      }
+    ],
+    "domain_knowledge": [
+      {
+        "name": "IoT",
+        "proficiency": "advanced",
+        "years_experience": "2",
+        "context": "Smart home automation"
+      },
+      {
+        "name": "Networking",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Managed IT operations"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "AWS Certified",
+        "issued_by": "Amazon",
+        "year": "2024"
+      }
+    ],
+    "operating_systems": [
+      {
+        "name": "Linux CLI",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in DevOps work"
+      }
+    ],
+    "assembling_languages": [
+      {
+        "name": "NASM Assembly",
+        "proficiency": "beginner",
+        "years_experience": "1",
+        "context": "Used in Rumbly project"
+      },
+      {
+        "name": "C",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Used for system programming"
+      }
+    ],
+    "frontend_dev": [
+      {
+        "name": "Flutter",
+        "proficiency": "advanced",
+        "years_experience": "1",
+        "context": "Used in Habitat project"
+      },
+      {
+        "name": "Streamlit",
+        "proficiency": "intermediate",
+        "years_experience": "0.5",
+        "context": "Used for data analysis"
+      }
+    ],
+    "development_tools": [
+      {
+        "name": "LangChain",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used for resume parsing"
+      }
+    ],
+    "data_structures": [
+      {
+        "name": "Data Structures",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Relevant coursework in Computer Science and Engineering"
+      },
+      {
+        "name": "Operating Systems",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Relevant coursework in Computer Science and Engineering"
+      }
+    ],
+    "other_tools": [
+      {
+        "name": "Tasmota",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in Habitat project"
+      },
+      {
+        "name": "ESP32",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in IoT projects"
+      }
+    ],
+    "cloud_platforms": [
+      {
+        "name": "AWS",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Cloud deployment"
+      }
+    ]
+  }
+}

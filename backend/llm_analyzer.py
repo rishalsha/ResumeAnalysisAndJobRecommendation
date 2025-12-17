@@ -661,11 +661,392 @@ Return ONLY valid JSON, no additional text."""
         logger.info("Generating improvement suggestions...")
         return self.analyze_resume(resume_text, self.get_improvement_suggestions_prompt, "suggestions")
     
-    def match_job(self, resume_text: str, job_description: str) -> Dict[str, Any]:
-        """Match resume against job description."""
-        logger.info("Analyzing job match...")
-        prompt_func = lambda txt: self.get_job_match_prompt(txt, job_description)
-        return self.analyze_resume(resume_text, prompt_func)
+    def extract_detailed_skills(self, resume_text: str) -> Dict[str, Any]:
+        """
+        Extract comprehensive skills with experience levels and categorization.
+        Returns structured skills data for gap analysis.
+        """
+        logger.info("Extracting detailed skills with experience levels...")
+        
+        # Check cache first
+        cached_result = self.cache.get(resume_text, "detailed_skills")
+        if cached_result:
+            return cached_result
+        
+        prompt = f"""You are an expert technical recruiter and resume analyst. Extract ALL skills from this resume with maximum detail.
+
+Resume:
+{resume_text}
+
+Extract and categorize EVERY skill mentioned or demonstrated. Be thorough and comprehensive.
+
+Return ONLY valid JSON with this structure:
+{{
+    "programming_languages": [
+        {{"name": "Python", "proficiency": "advanced|intermediate|beginner", "years_experience": "3", "context": "Used in 5 projects"}}
+    ],
+    "frameworks": [
+        {{"name": "React", "proficiency": "intermediate", "years_experience": "1", "context": "Frontend development"}}
+    ],
+    "tools": [
+        {{"name": "Docker", "proficiency": "intermediate", "years_experience": "2", "context": "DevOps work"}}
+    ],
+    "databases": [
+        {{"name": "MongoDB", "proficiency": "intermediate", "years_experience": "1", "context": "Backend projects"}}
+    ],
+    "platforms": [
+        {{"name": "AWS", "proficiency": "beginner", "years_experience": "0.5", "context": "Cloud deployment"}}
+    ],
+    "methodologies": [
+        {{"name": "Agile", "proficiency": "intermediate", "years_experience": "2", "context": "Team development"}}
+    ],
+    "soft_skills": [
+        {{"name": "Leadership", "proficiency": "intermediate", "context": "Led team of 3 developers"}}
+    ],
+    "domain_knowledge": [
+        {{"name": "IoT", "proficiency": "advanced", "years_experience": "2", "context": "Smart home automation"}}
+    ],
+    "certifications": [
+        {{"name": "AWS Certified", "issued_by": "Amazon", "year": "2024"}}
+    ]
+}}
+
+Extract 20-50+ skills total. Include skills from Technical Skills section, projects, work experience, and education.
+If years of experience not explicitly mentioned, estimate from context (0.5 for recent/single project, 1-2 for multiple uses).
+Return ONLY valid JSON, no additional text."""
+
+        try:
+            response_text = self._call_ollama_with_retry(prompt)
+            parsed = self._parse_response(response_text)
+            
+            if parsed and not isinstance(parsed.get("error"), str):
+                # Cache the result
+                self.cache.set(resume_text, "detailed_skills", parsed)
+                return parsed
+            else:
+                return {"error": "Failed to parse skills extraction response"}
+                
+        except Exception as e:
+            logger.error(f"Error in detailed skills extraction: {e}")
+            return {"error": str(e)}
+    
+    def get_industry_skills(self, target_role: str, experience_level: str = "mid") -> Dict[str, Any]:
+        """
+        Get industry-standard required skills for a target role.
+        
+        Args:
+            target_role: Job title/role (e.g., "Backend Developer", "Data Scientist")
+            experience_level: "junior", "mid", "senior"
+        """
+        logger.info(f"Fetching industry skills for {target_role} ({experience_level} level)...")
+        
+        prompt = f"""You are an expert technical recruiter with deep knowledge of industry skill requirements.
+
+For a {experience_level}-level {target_role} position in 2025, list the required technical skills.
+
+Return ONLY valid JSON with this structure:
+{{
+    "role": "{target_role}",
+    "level": "{experience_level}",
+    "must_have_skills": [
+        {{"skill": "Python", "category": "programming_language", "importance": "critical", "typical_years": "3+"}}
+    ],
+    "nice_to_have_skills": [
+        {{"skill": "GraphQL", "category": "framework", "importance": "beneficial", "typical_years": "1+"}}
+    ],
+    "emerging_skills": [
+        {{"skill": "LangChain", "category": "framework", "importance": "growing", "adoption_trend": "high"}}
+    ]
+}}
+
+Be comprehensive. Include 10-20 must-have skills and 10-15 nice-to-have skills.
+Categories: programming_language, framework, tool, database, platform, methodology, soft_skill
+Return ONLY valid JSON, no additional text."""
+
+        try:
+            response_text = self._call_ollama_with_retry(prompt)
+            parsed = self._parse_response(response_text)
+            
+            if parsed and not isinstance(parsed.get("error"), str):
+                return parsed
+            else:
+                return {"error": "Failed to parse industry skills response"}
+                
+        except Exception as e:
+            logger.error(f"Error getting industry skills: {e}")
+            return {"error": str(e)}
+    
+    def analyze_skills_gap(self, resume_text: str, identified_skills: Dict = None, target_role: str = None, experience_level: str = "mid") -> Dict[str, Any]:
+        """
+        Comprehensive skills gap analysis comparing resume skills against industry standards.
+        
+        Args:
+            resume_text: Resume content
+            identified_skills: Pre-extracted skills from database (optional, will extract if None)
+            target_role: Target job role (if None, inferred from resume)
+            experience_level: "junior", "mid", "senior"
+        
+        Returns:
+            Comprehensive gap analysis with recommendations
+        """
+        logger.info("Starting comprehensive skills gap analysis...")
+        
+        # Check cache
+        cache_key = f"{target_role}_{experience_level}" if target_role else "inferred"
+        cached_result = self.cache.get(resume_text, f"skills_gap_{cache_key}")
+        if cached_result:
+            logger.info("Returning cached skills gap analysis")
+            return cached_result
+        
+        # Step 1: Use provided skills or extract from resume
+        if identified_skills:
+            logger.info("Using pre-extracted skills from database")
+            extracted_skills = self._convert_db_skills_to_detailed_format(identified_skills)
+        else:
+            logger.info("Extracting skills from resume")
+            extracted_skills = self.extract_detailed_skills(resume_text)
+            if "error" in extracted_skills:
+                return extracted_skills
+        
+        # Step 2: Infer target role if not provided
+        if not target_role:
+            logger.info("Inferring target role from resume...")
+            infer_prompt = f"""Based on this resume, what is the most likely target job role?
+
+Resume:
+{resume_text[:2000]}
+
+Return ONLY a JSON object:
+{{"target_role": "job title", "experience_level": "junior|mid|senior", "reasoning": "brief explanation"}}"""
+            
+            try:
+                response_text = self._call_ollama_with_retry(infer_prompt)
+                inferred = self._parse_response(response_text)
+                target_role = inferred.get("target_role", "Software Developer")
+                experience_level = inferred.get("experience_level", experience_level)
+                logger.info(f"Inferred role: {target_role} ({experience_level})")
+            except Exception as e:
+                logger.warning(f"Failed to infer role: {e}. Using default.")
+                target_role = "Software Developer"
+        
+        # Step 3: Get industry requirements
+        industry_skills = self.get_industry_skills(target_role, experience_level)
+        if "error" in industry_skills:
+            return industry_skills
+        
+        # Step 4: Perform gap analysis
+        gap_analysis_prompt = f"""You are a career coach analyzing skills gaps.
+
+CANDIDATE'S SKILLS:
+{json.dumps(extracted_skills, indent=2)}
+
+INDUSTRY REQUIREMENTS FOR {target_role} ({experience_level} level):
+{json.dumps(industry_skills, indent=2)}
+
+Analyze the gap and provide recommendations. Return ONLY valid JSON:
+{{
+    "summary": {{
+        "total_skills_found": 0,
+        "matching_must_have": 0,
+        "missing_critical": 0,
+        "strength_areas": ["area1", "area2"],
+        "gap_areas": ["area1", "area2"],
+        "readiness_score": 0-100
+    }},
+    "present_skills": [
+        {{"skill": "Python", "category": "programming_language", "proficiency": "advanced", "matches_requirement": true}}
+    ],
+    "missing_critical_skills": [
+        {{"skill": "Docker", "category": "tool", "priority": "high", "typical_learning_time": "2-4 weeks", "why_important": "Essential for deployment"}}
+    ],
+    "missing_nice_to_have": [
+        {{"skill": "GraphQL", "category": "framework", "priority": "medium", "typical_learning_time": "1-2 weeks", "why_important": "Modern API standard"}}
+    ],
+    "skill_recommendations": [
+        {{
+            "skill": "Kubernetes",
+            "priority": "high|medium|low",
+            "category": "tool",
+            "why_learn": "Industry standard for container orchestration",
+            "current_demand": "very high",
+            "difficulty": "intermediate",
+            "estimated_learning_time": "4-8 weeks",
+            "prerequisites": ["Docker", "Linux"],
+            "learning_path": ["Start with Docker", "Learn K8s concepts", "Practice with minikube"],
+            "resources": [
+                {{"type": "course", "name": "Kubernetes for Beginners", "url": "example.com", "cost": "free|paid"}},
+                {{"type": "documentation", "name": "Official K8s Docs", "url": "kubernetes.io"}},
+                {{"type": "practice", "name": "KodeKloud Labs", "url": "example.com"}}
+            ],
+            "use_cases": ["Deploy microservices", "Scale applications", "Manage containers"]
+        }}
+    ],
+    "learning_roadmap": {{
+        "immediate_focus": ["skill1", "skill2"],
+        "short_term": ["skill3", "skill4"],
+        "long_term": ["skill5", "skill6"]
+    }},
+    "visualization_data": {{
+        "skills_by_category": {{"programming": 5, "frameworks": 3, "tools": 4}},
+        "proficiency_distribution": {{"advanced": 3, "intermediate": 8, "beginner": 5}},
+        "gap_severity": {{"critical": 2, "moderate": 5, "minor": 8}}
+    }}
+}}
+
+Prioritize 5-10 high-impact skills to learn. Be specific and actionable.
+Return ONLY valid JSON, no additional text."""
+
+        try:
+            response_text = self._call_ollama_with_retry(gap_analysis_prompt)
+            gap_analysis = self._parse_response(response_text)
+            
+            if gap_analysis and not isinstance(gap_analysis.get("error"), str):
+                # Enhance with metadata
+                gap_analysis["target_role"] = target_role
+                gap_analysis["experience_level"] = experience_level
+                gap_analysis["analysis_date"] = datetime.now().isoformat()
+                gap_analysis["extracted_skills"] = extracted_skills
+                
+                # Cache the result
+                self.cache.set(resume_text, f"skills_gap_{cache_key}", gap_analysis)
+                
+                logger.info("Skills gap analysis completed successfully")
+                return gap_analysis
+            else:
+                return {"error": "Failed to parse gap analysis response"}
+                
+        except Exception as e:
+            logger.error(f"Error in skills gap analysis: {e}")
+            return {"error": str(e)}
+
+    def analyze_skills_gap_from_extracted(self, extracted_skills: Dict[str, Any], target_role: str = None, experience_level: str = "mid") -> Dict[str, Any]:
+        """
+        Skills gap analysis using pre-extracted skills from resume analysis.
+        This is more efficient and reuses the skills already extracted.
+        
+        Args:
+            extracted_skills: Pre-extracted skills dict from comprehensive analysis
+            target_role: Target job role
+            experience_level: "junior", "mid", or "senior"
+        
+        Returns:
+            Gap analysis with recommendations
+        """
+        logger.info("Starting skills gap analysis from extracted skills...")
+        
+        # Format extracted skills nicely for the prompt
+        skills_summary = self._format_skills_for_prompt(extracted_skills)
+        
+        gap_analysis_prompt = f"""You are an expert career advisor analyzing skills gaps.
+
+CANDIDATE'S CURRENT SKILLS:
+{skills_summary}
+
+TARGET ROLE: {target_role or 'Not specified'}
+EXPERIENCE LEVEL: {experience_level}
+
+Analyze this candidate's skills against industry requirements for a {experience_level} level {target_role or 'Software Professional'}.
+
+Return ONLY valid JSON with ALL of these fields:
+{{
+    "summary": {{
+        "total_skills_found": number,
+        "matching_must_have": number,
+        "missing_critical": number,
+        "strength_areas": ["area1", "area2"],
+        "gap_areas": ["area1", "area2"],
+        "readiness_score": 0-100
+    }},
+    "present_skills": [
+        {{"skill": "skill_name", "category": "category", "proficiency": "level", "matches_requirement": true/false}}
+    ],
+    "missing_critical_skills": [
+        {{"skill": "skill_name", "category": "category", "priority": "high|medium|low", "typical_learning_time": "timeframe", "why_important": "reason"}}
+    ],
+    "missing_nice_to_have": [
+        {{"skill": "skill_name", "category": "category", "priority": "medium|low", "typical_learning_time": "timeframe", "why_important": "reason"}}
+    ],
+    "skill_recommendations": [
+        {{
+            "skill": "skill_name",
+            "priority": "high|medium|low",
+            "category": "category",
+            "why_learn": "reason",
+            "current_demand": "very_high|high|medium",
+            "difficulty": "beginner|intermediate|advanced",
+            "estimated_learning_time": "timeframe",
+            "prerequisites": ["skill1"],
+            "learning_path": ["step1", "step2"],
+            "resources": [
+                {{"type": "course|documentation|practice", "name": "name", "url": "url", "cost": "free|paid"}}
+            ],
+            "use_cases": ["use_case1"]
+        }}
+    ],
+    "learning_roadmap": {{
+        "immediate_focus": ["skill1", "skill2"],
+        "short_term": ["skill3"],
+        "long_term": ["skill4"]
+    }},
+    "visualization_data": {{
+        "skills_by_category": {{"category": count}},
+        "proficiency_distribution": {{"advanced": count, "intermediate": count, "beginner": count}},
+        "gap_severity": {{"critical": count, "moderate": count, "minor": count}}
+    }}
+}}
+
+Be comprehensive and thorough. Include all required fields."""
+
+        try:
+            response_text = self._call_ollama_with_retry(gap_analysis_prompt)
+            gap_analysis = self._parse_response(response_text)
+            
+            if gap_analysis and not isinstance(gap_analysis.get("error"), str):
+                # Enhance with metadata
+                gap_analysis["target_role"] = target_role or "Professional"
+                gap_analysis["experience_level"] = experience_level
+                gap_analysis["analysis_date"] = datetime.now().isoformat()
+                gap_analysis["extracted_skills"] = extracted_skills
+                
+                # Cache the result
+                skills_key = f"{target_role}_{experience_level}" if target_role else "inferred"
+                self.cache.set(json.dumps(extracted_skills), f"skills_gap_{skills_key}", gap_analysis)
+                
+                logger.info("Skills gap analysis completed successfully")
+                return gap_analysis
+            else:
+                logger.error(f"Gap analysis parsing failed: {gap_analysis}")
+                return {"error": "Failed to parse gap analysis response", "raw_response": response_text}
+                
+        except Exception as e:
+            logger.error(f"Error in skills gap analysis: {e}")
+            return {"error": str(e)}
+    
+    def _format_skills_for_prompt(self, extracted_skills: Dict[str, Any]) -> str:
+        """Format extracted skills nicely for the LLM prompt."""
+        formatted = ""
+        
+        for category, skills in extracted_skills.items():
+            if isinstance(skills, list) and skills:
+                formatted += f"\n{category.replace('_', ' ').title()}:\n"
+                for skill in skills:
+                    if isinstance(skill, dict):
+                        name = skill.get('name', skill.get('skill', 'Unknown'))
+                        proficiency = skill.get('proficiency', 'unknown')
+                        years = skill.get('years_experience', '')
+                        formatted += f"  - {name} ({proficiency}{', ' + years + ' years' if years else ''})\n"
+                    else:
+                        formatted += f"  - {skill}\n"
+        
+        return formatted
+
+    def analyze_skills_gap(self, resume_text: str, target_role: str = None, experience_level: str = "mid") -> Dict[str, Any]:
+        """Deprecated: Use analyze_skills_gap_from_extracted() instead.
+        This kept for backwards compatibility."""
+        logger.warning("analyze_skills_gap() called with resume_text - consider using analyze_skills_gap_from_extracted() with pre-extracted skills")
+        # Extract skills first
+        extracted = self.extract_detailed_skills(resume_text)
+        return self.analyze_skills_gap_from_extracted(extracted, target_role, experience_level)
     
     def comprehensive_analysis(self, resume_text: str, use_cache: bool = True) -> Dict[str, Any]:
         """Perform comprehensive analysis of all resume aspects at once with priority ordering."""
@@ -786,9 +1167,9 @@ Rules:
             except Exception:
                 comprehensive_result["overall_score"] = None
             
-            # Cache the result
-            if use_cache:
-                self.cache.set(resume_text, "comprehensive", comprehensive_result)
+            # Always cache the result after performing a new analysis
+            # This ensures the latest analysis is cached for future use
+            self.cache.set(resume_text, "comprehensive", comprehensive_result)
             
             logger.info("Comprehensive analysis completed successfully")
             return comprehensive_result

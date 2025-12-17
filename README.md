@@ -19,9 +19,12 @@ An intelligent application that analyzes user resumes and provides personalized 
 ✅ **Resume Upload**: Support for PDF and DOCX file formats with validation
 ✅ **Text Extraction**: Automatic text extraction from resume files
 ✅ **Resume Analysis**: AI-powered analysis using Ollama LLM with strengths/weaknesses detection
+✅ **Skills Gap Analysis**: Comprehensive skills extraction, industry comparison, and personalized learning roadmap
 ✅ **Intelligent Caching**: Two-level cache (memory + disk) to avoid re-analyzing identical resumes
 ✅ **Confidence Scoring**: 0-100% confidence scores on all analyses
 ✅ **Database Storage**: Persistent storage of analysis results linked to user profiles
+✅ **Interactive Visualizations**: Plotly charts for skills distribution and gap analysis
+✅ **Learning Recommendations**: Prioritized skill recommendations with resources and learning paths
 ✅ **User Dashboard**: Central hub for navigation and quick stats
 ✅ **Profile Management**: User profile and settings pages
 ✅ **Job Recommendations**: Personalized job recommendations based on resume analysis
@@ -47,6 +50,7 @@ ResumeAnalysisAndJobRecommendationSystem/
 │   ├── dashboard.py               # Main dashboard
 │   ├── profile.py                 # User profile page
 │   ├── resume_analysis.py         # Resume analysis page
+│   ├── skills_gap.py              # Skills gap analysis page (NEW)
 │   ├── job_recommendations.py     # Job recommendations page
 │   └── settings.py                # User settings page
 ├── utils/

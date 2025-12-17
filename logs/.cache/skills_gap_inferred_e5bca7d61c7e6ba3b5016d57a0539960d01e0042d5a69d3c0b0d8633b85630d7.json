@@ -1,0 +1,406 @@
+{
+  "summary": {
+    "total_skills_found": 0,
+    "matching_must_have": 0,
+    "missing_critical": 1,
+    "strength_areas": [],
+    "gap_areas": [
+      "CloudFormation",
+      "Kubernetes"
+    ],
+    "readiness_score": 40
+  },
+  "present_skills": [
+    {
+      "skill": "Git",
+      "category": "tool",
+      "proficiency": "advanced",
+      "matches_requirement": true
+    }
+  ],
+  "missing_critical_skills": [
+    {
+      "skill": "Kubernetes",
+      "category": "tool",
+      "priority": "high",
+      "typical_learning_time": "4-8 weeks",
+      "why_important": "Industry standard for container orchestration"
+    },
+    {
+      "skill": "CloudFormation",
+      "category": "tool",
+      "priority": "high",
+      "typical_learning_time": "2-4 weeks",
+      "why_important": "Essential for cloud deployment"
+    }
+  ],
+  "missing_nice_to_have": [
+    {
+      "skill": "GraphQL",
+      "category": "framework",
+      "priority": "medium",
+      "typical_learning_time": "1-2 weeks",
+      "why_important": "Modern API standard"
+    }
+  ],
+  "skill_recommendations": [
+    {
+      "skill": "Kubernetes",
+      "priority": "high",
+      "category": "tool",
+      "why_learn": "Industry standard for container orchestration",
+      "current_demand": "very high",
+      "difficulty": "intermediate",
+      "estimated_learning_time": "4-8 weeks",
+      "prerequisites": [
+        "Docker",
+        "Linux"
+      ],
+      "learning_path": [
+        "Start with Docker",
+        "Learn K8s concepts",
+        "Practice with minikube"
+      ],
+      "resources": [
+        {
+          "type": "course",
+          "name": "Kubernetes for Beginners",
+          "url": "example.com",
+          "cost": "free|paid"
+        },
+        {
+          "type": "documentation",
+          "name": "Official K8s Docs",
+          "url": "kubernetes.io"
+        },
+        {
+          "type": "practice",
+          "name": "KodeKloud Labs",
+          "url": "example.com"
+        }
+      ],
+      "use_cases": [
+        "Deploy microservices",
+        "Scale applications",
+        "Manage containers"
+      ]
+    },
+    {
+      "skill": "CloudFormation",
+      "priority": "high",
+      "category": "tool",
+      "why_learn": "Essential for cloud deployment",
+      "current_demand": "very high",
+      "difficulty": "intermediate",
+      "estimated_learning_time": "2-4 weeks",
+      "prerequisites": [
+        "AWS"
+      ],
+      "learning_path": [
+        "Start with AWS",
+        "Learn CloudFormation concepts",
+        "Practice with templates"
+      ],
+      "resources": [
+        {
+          "type": "course",
+          "name": "CloudFormation for Beginners",
+          "url": "example.com",
+          "cost": "free|paid"
+        },
+        {
+          "type": "documentation",
+          "name": "AWS Documentation",
+          "url": "aws.amazon.com"
+        },
+        {
+          "type": "practice",
+          "name": "CloudFormation Challenges",
+          "url": "example.com"
+        }
+      ],
+      "use_cases": [
+        "Deploy cloud applications",
+        "Manage infrastructure",
+        "Automate deployment"
+      ]
+    }
+  ],
+  "learning_roadmap": {
+    "immediate_focus": [
+      "Kubernetes"
+    ],
+    "short_term": [
+      "CloudFormation"
+    ],
+    "long_term": []
+  },
+  "visualization_data": {
+    "skills_by_category": {
+      "programming": 0,
+      "frameworks": 3,
+      "tools": 4
+    },
+    "proficiency_distribution": {
+      "advanced": 1,
+      "intermediate": 8,
+      "beginner": 5
+    },
+    "gap_severity": {
+      "critical": 2,
+      "moderate": 5,
+      "minor": 8
+    }
+  },
+  "target_role": "Software Developer/Intern",
+  "experience_level": "junior",
+  "analysis_date": "2025-12-17T22:26:13.051789",
+  "extracted_skills": {
+    "programming_languages": [
+      {
+        "name": "Python",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in 4 projects"
+      },
+      {
+        "name": "C",
+        "proficiency": "beginner",
+        "years_experience": "1",
+        "context": "Used in educational projects"
+      },
+      {
+        "name": "Java",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Used in backend development"
+      },
+      {
+        "name": "JavaScript",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in web development"
+      }
+    ],
+    "frameworks": [
+      {
+        "name": "Node.js",
+        "proficiency": "advanced",
+        "years_experience": "2",
+        "context": "Used in backend projects"
+      },
+      {
+        "name": "Express.js",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used in backend development"
+      },
+      {
+        "name": "Spring Boot",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used in backend projects"
+      },
+      {
+        "name": "React",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Frontend development"
+      }
+    ],
+    "tools": [
+      {
+        "name": "Docker",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "DevOps work"
+      },
+      {
+        "name": "Git",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in version control"
+      },
+      {
+        "name": "GitHub",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in version control"
+      },
+      {
+        "name": "Neovim",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used as an editor"
+      }
+    ],
+    "databases": [
+      {
+        "name": "SQLite",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in backend projects"
+      },
+      {
+        "name": "MySQL",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Used in backend development"
+      },
+      {
+        "name": "PostgreSQL",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in database administration"
+      },
+      {
+        "name": "MongoDB",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Backend projects"
+      }
+    ],
+    "platforms": [
+      {
+        "name": "ESP32",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in IoT projects"
+      },
+      {
+        "name": "AWS",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Cloud deployment"
+      }
+    ],
+    "methodologies": [
+      {
+        "name": "Agile",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Team development"
+      },
+      {
+        "name": "Sandboxed Execution",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in Rumbly project"
+      }
+    ],
+    "soft_skills": [
+      {
+        "name": "Leadership",
+        "proficiency": "intermediate",
+        "context": "Led team of 3 developers"
+      },
+      {
+        "name": "Communication",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in teamwork"
+      }
+    ],
+    "domain_knowledge": [
+      {
+        "name": "IoT",
+        "proficiency": "advanced",
+        "years_experience": "2",
+        "context": "Smart home automation"
+      },
+      {
+        "name": "Networking",
+        "proficiency": "intermediate",
+        "years_experience": "1",
+        "context": "Managed IT operations"
+      }
+    ],
+    "certifications": [
+      {
+        "name": "AWS Certified",
+        "issued_by": "Amazon",
+        "year": "2024"
+      }
+    ],
+    "operating_systems": [
+      {
+        "name": "Linux CLI",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Used in DevOps work"
+      }
+    ],
+    "assembling_languages": [
+      {
+        "name": "NASM Assembly",
+        "proficiency": "beginner",
+        "years_experience": "1",
+        "context": "Used in Rumbly project"
+      },
+      {
+        "name": "C",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Used for system programming"
+      }
+    ],
+    "frontend_dev": [
+      {
+        "name": "Flutter",
+        "proficiency": "advanced",
+        "years_experience": "1",
+        "context": "Used in Habitat project"
+      },
+      {
+        "name": "Streamlit",
+        "proficiency": "intermediate",
+        "years_experience": "0.5",
+        "context": "Used for data analysis"
+      }
+    ],
+    "development_tools": [
+      {
+        "name": "LangChain",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used for resume parsing"
+      }
+    ],
+    "data_structures": [
+      {
+        "name": "Data Structures",
+        "proficiency": "advanced",
+        "years_experience": "3",
+        "context": "Relevant coursework in Computer Science and Engineering"
+      },
+      {
+        "name": "Operating Systems",
+        "proficiency": "intermediate",
+        "years_experience": "2",
+        "context": "Relevant coursework in Computer Science and Engineering"
+      }
+    ],
+    "other_tools": [
+      {
+        "name": "Tasmota",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in Habitat project"
+      },
+      {
+        "name": "ESP32",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Used in IoT projects"
+      }
+    ],
+    "cloud_platforms": [
+      {
+        "name": "AWS",
+        "proficiency": "beginner",
+        "years_experience": "0.5",
+        "context": "Cloud deployment"
+      }
+    ]
+  }
+}

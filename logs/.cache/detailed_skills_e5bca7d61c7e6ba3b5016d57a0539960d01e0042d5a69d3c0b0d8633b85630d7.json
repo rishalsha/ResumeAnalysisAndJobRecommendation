@@ -1,0 +1,248 @@
+{
+  "programming_languages": [
+    {
+      "name": "Python",
+      "proficiency": "advanced",
+      "years_experience": "3",
+      "context": "Used in 4 projects"
+    },
+    {
+      "name": "C",
+      "proficiency": "beginner",
+      "years_experience": "1",
+      "context": "Used in educational projects"
+    },
+    {
+      "name": "Java",
+      "proficiency": "intermediate",
+      "years_experience": "2",
+      "context": "Used in backend development"
+    },
+    {
+      "name": "JavaScript",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in web development"
+    }
+  ],
+  "frameworks": [
+    {
+      "name": "Node.js",
+      "proficiency": "advanced",
+      "years_experience": "2",
+      "context": "Used in backend projects"
+    },
+    {
+      "name": "Express.js",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Used in backend development"
+    },
+    {
+      "name": "Spring Boot",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Used in backend projects"
+    },
+    {
+      "name": "React",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Frontend development"
+    }
+  ],
+  "tools": [
+    {
+      "name": "Docker",
+      "proficiency": "intermediate",
+      "years_experience": "2",
+      "context": "DevOps work"
+    },
+    {
+      "name": "Git",
+      "proficiency": "advanced",
+      "years_experience": "3",
+      "context": "Used in version control"
+    },
+    {
+      "name": "GitHub",
+      "proficiency": "advanced",
+      "years_experience": "3",
+      "context": "Used in version control"
+    },
+    {
+      "name": "Neovim",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Used as an editor"
+    }
+  ],
+  "databases": [
+    {
+      "name": "SQLite",
+      "proficiency": "advanced",
+      "years_experience": "3",
+      "context": "Used in backend projects"
+    },
+    {
+      "name": "MySQL",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Used in backend development"
+    },
+    {
+      "name": "PostgreSQL",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in database administration"
+    },
+    {
+      "name": "MongoDB",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Backend projects"
+    }
+  ],
+  "platforms": [
+    {
+      "name": "ESP32",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in IoT projects"
+    },
+    {
+      "name": "AWS",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Cloud deployment"
+    }
+  ],
+  "methodologies": [
+    {
+      "name": "Agile",
+      "proficiency": "intermediate",
+      "years_experience": "2",
+      "context": "Team development"
+    },
+    {
+      "name": "Sandboxed Execution",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in Rumbly project"
+    }
+  ],
+  "soft_skills": [
+    {
+      "name": "Leadership",
+      "proficiency": "intermediate",
+      "context": "Led team of 3 developers"
+    },
+    {
+      "name": "Communication",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in teamwork"
+    }
+  ],
+  "domain_knowledge": [
+    {
+      "name": "IoT",
+      "proficiency": "advanced",
+      "years_experience": "2",
+      "context": "Smart home automation"
+    },
+    {
+      "name": "Networking",
+      "proficiency": "intermediate",
+      "years_experience": "1",
+      "context": "Managed IT operations"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "AWS Certified",
+      "issued_by": "Amazon",
+      "year": "2024"
+    }
+  ],
+  "operating_systems": [
+    {
+      "name": "Linux CLI",
+      "proficiency": "advanced",
+      "years_experience": "3",
+      "context": "Used in DevOps work"
+    }
+  ],
+  "assembling_languages": [
+    {
+      "name": "NASM Assembly",
+      "proficiency": "beginner",
+      "years_experience": "1",
+      "context": "Used in Rumbly project"
+    },
+    {
+      "name": "C",
+      "proficiency": "intermediate",
+      "years_experience": "2",
+      "context": "Used for system programming"
+    }
+  ],
+  "frontend_dev": [
+    {
+      "name": "Flutter",
+      "proficiency": "advanced",
+      "years_experience": "1",
+      "context": "Used in Habitat project"
+    },
+    {
+      "name": "Streamlit",
+      "proficiency": "intermediate",
+      "years_experience": "0.5",
+      "context": "Used for data analysis"
+    }
+  ],
+  "development_tools": [
+    {
+      "name": "LangChain",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used for resume parsing"
+    }
+  ],
+  "data_structures": [
+    {
+      "name": "Data Structures",
+      "proficiency": "advanced",
+      "years_experience": "3",
+      "context": "Relevant coursework in Computer Science and Engineering"
+    },
+    {
+      "name": "Operating Systems",
+      "proficiency": "intermediate",
+      "years_experience": "2",
+      "context": "Relevant coursework in Computer Science and Engineering"
+    }
+  ],
+  "other_tools": [
+    {
+      "name": "Tasmota",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in Habitat project"
+    },
+    {
+      "name": "ESP32",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Used in IoT projects"
+    }
+  ],
+  "cloud_platforms": [
+    {
+      "name": "AWS",
+      "proficiency": "beginner",
+      "years_experience": "0.5",
+      "context": "Cloud deployment"
+    }
+  ]
+}

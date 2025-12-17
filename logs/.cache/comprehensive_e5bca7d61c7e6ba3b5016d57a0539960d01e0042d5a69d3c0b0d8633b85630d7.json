@@ -1,17 +1,16 @@
 {
   "strengths": {
-    "summary": "The resume showcases a strong foundation in computer science and engineering with relevant experience in backend development, systems programming, IoT, and government IT operations.",
+    "summary": "Muhammad Rishal P Kannur has a strong educational background in Electronics and Communication Engineering, with relevant experience in backend development and systems programming.",
     "items": [
       {
-        "strength": "Clear formatting",
-        "category": "formatting",
-        "importance": "critical",
+        "strength": "Clear formatting and easy-to-read layout",
+        "category": "formatting|content",
+        "importance": "high",
         "confidence": 90,
         "examples": [
-          "Professional Summary",
-          "Technical Skills sections"
+          "The resume has a clean and organized format with clear headings and bullet points."
         ],
-        "location": "Summary and Technical Skills sections"
+        "location": "Professional Summary"
       },
       {
         "strength": "Relevant experience in backend development and systems programming",
@@ -19,168 +18,247 @@
         "importance": "high",
         "confidence": 95,
         "examples": [
-          "Remote Software Development Intern at Infosys Springboard",
-          "Network Supervisor & Digital Signature Project Coordinator at KELTRON"
+          "As a Network Supervisor & Digital Signature Project Coordinator at KELTRON, he managed IT and network operations.",
+          "As an Infosys Springboard Virtual Intern, he developed a Resume Analysis and Job Recommendation system."
         ],
-        "location": "Work Experience section"
-      },
-      {
-        "strength": "Quantifiable achievements in IoT and government IT operations",
-        "category": "experience|achievements",
-        "importance": "medium",
-        "confidence": 80,
-        "examples": [
-          "Implemented authentication with bcrypt, SQLite3, and LangChain-based resume parsing"
-        ],
-        "location": "Work Experience section"
+        "location": "Experience"
       },
       {
         "strength": "Strong educational background in Electronics and Communication Engineering",
-        "category": "education",
+        "category": "education|domain_expertise",
+        "importance": "high",
+        "confidence": 90,
+        "examples": [
+          "He holds a Diploma in Electronics and Communication Engineering with CGPA: 8.77.",
+          "His degree demonstrates strong foundations in electronics, networking, embedded systems, and low-level software."
+        ],
+        "location": "Education"
+      },
+      {
+        "strength": "Quantifiable achievements",
+        "category": "achievements|quantitative",
+        "importance": "medium",
+        "confidence": 80,
+        "examples": [
+          "Developing a Resume Analysis and Job Recommendation system using Python and Streamlit."
+        ],
+        "location": "Experience"
+      },
+      {
+        "strength": "Action verbs in the professional summary",
+        "category": "formatting|content",
         "importance": "medium",
         "confidence": 85,
         "examples": [
-          "Diploma \u2013 Electronics and Communication Engineering (CGPA: 8.77)"
+          "Undergraduate with hands-on experience in backend development, systems programming, IoT, and government IT operations."
         ],
-        "location": "Education section"
+        "location": "Professional Summary"
       },
       {
-        "strength": "Domain expertise in IoT systems and network supervision",
-        "category": "skills|experience",
+        "strength": "Domain expertise in IoT and networking",
+        "category": "domain_expertise|skills",
         "importance": "medium",
-        "confidence": 75,
+        "confidence": 80,
         "examples": [
-          "Smart Home Automation \u2013 Habitat",
-          "Rumbly (Run Assembly) \u2013 NASM Code Execution Platform"
+          "Built an IoT-based home automation system using ESP32 and Tasmota.",
+          "Managed IT and network operations at the Department of Treasuries, Government of Kerala."
         ],
-        "location": "Projects section"
-      },
-      {
-        "strength": "Action verbs used effectively in Work Experience and Projects sections",
-        "category": "formatting|content",
-        "importance": "medium",
-        "confidence": 70,
-        "examples": [
-          "Managed IT and network operations",
-          "Developing a Resume Analysis and Job Recommendation system"
-        ],
-        "location": "Work Experience section"
-      },
-      {
-        "strength": "Relevant certifications not explicitly mentioned",
-        "category": "certifications",
-        "importance": "low",
-        "confidence": 60,
-        "examples": [],
-        "location": "N/A"
+        "location": "Experience"
       }
     ]
   },
   "weaknesses": {
-    "summary": "Some areas for improvement include missing contact information, poor formatting in certain sections, and lack of quantifiable achievements.",
+    "summary": "Muhammad Rishal P Kannur's resume has some minor formatting issues and lacks quantifiable achievements in his experience section.",
     "items": [
       {
         "weakness": "Missing contact information",
-        "category": "formatting|content",
-        "severity": "critical",
-        "location": "Contact Information section",
-        "impact": "Difficulty for employers to get in touch with the candidate",
-        "fix": "Add a professional email address, phone number, and LinkedIn profile link.",
-        "confidence": 80,
-        "examples": []
+        "category": "formatting|missing_info",
+        "severity": "minor",
+        "location": "Contact Information",
+        "impact": "Affects clarity and professionalism.",
+        "fix": "Add a professional email address or phone number.",
+        "confidence": 70,
+        "examples": [
+          "The contact information section is incomplete, with only an email address provided."
+        ]
       },
       {
-        "weakness": "Poor formatting in Summary section",
-        "category": "formatting|content",
+        "weakness": "Lack of quantifiable achievements in experience",
+        "category": "experience|achievements",
         "severity": "minor",
-        "location": "Summary section",
-        "impact": "Difficulty for employers to quickly grasp the candidate's background and experience.",
-        "fix": "Improve bullet points, use clear language, and add relevant keywords.",
+        "location": "Experience",
+        "impact": "Affects credibility and impact.",
+        "fix": "Include specific numbers or metrics to demonstrate achievement.",
         "confidence": 60,
         "examples": [
-          "Professional Summary"
+          "The experience section lacks concrete numbers to quantify achievements."
         ]
       },
       {
-        "weakness": "Lack of quantifiable achievements",
-        "category": "experience|achievements",
-        "severity": "moderate",
-        "location": "Work Experience section",
-        "impact": "Difficulty for employers to evaluate the candidate's performance and impact.",
-        "fix": "Add specific numbers, metrics, or percentages to describe achievements.",
-        "confidence": 70,
-        "examples": []
-      },
-      {
-        "weakness": "Irrelevant information in Projects section",
-        "category": "projects|content",
-        "severity": "minor",
-        "location": "Projects section",
-        "impact": "Distraction from relevant projects and experience.",
-        "fix": "Remove unrelated information, focus on showcasing relevant skills and achievements.",
-        "confidence": 50,
-        "examples": [
-          "Smart Car Parking System"
-        ]
-      },
-      {
-        "weakness": "Unexplained employment gap in Work Experience section",
+        "weakness": "Poor formatting in the education section",
         "category": "formatting|content",
-        "severity": "low",
-        "location": "Work Experience section",
-        "impact": "Minor concern, but may require further clarification.",
-        "fix": "Add a brief explanation for the employment gap, if necessary.",
-        "confidence": 40,
-        "examples": []
+        "severity": "minor",
+        "location": "Education",
+        "impact": "Affects readability and clarity.",
+        "fix": "Improve bullet point spacing and use a clear format.",
+        "confidence": 75,
+        "examples": [
+          "The education section has inconsistent bullet point spacing."
+        ]
       },
       {
-        "weakness": "Relevant skills for target role not explicitly mentioned",
-        "category": "skills|content",
-        "severity": "low",
-        "location": "Skills section",
-        "impact": "Minor concern, but may require further clarification.",
-        "fix": "Add relevant skills for the target role, if necessary.",
-        "confidence": 30,
-        "examples": []
+        "weakness": "Lack of relevant certifications",
+        "category": "certifications|skills",
+        "severity": "minor",
+        "location": "Education",
+        "impact": "Affects credibility and expertise.",
+        "fix": "Consider adding relevant industry certifications or training.",
+        "confidence": 65,
+        "examples": [
+          "The resume does not mention any specific industry certifications."
+        ]
+      },
+      {
+        "weakness": "Irrelevant information in the summary",
+        "category": "formatting|content",
+        "severity": "minor",
+        "location": "Professional Summary",
+        "impact": "Affects clarity and focus.",
+        "fix": "Remove or rephrase irrelevant phrases.",
+        "confidence": 70,
+        "examples": [
+          "The phrase 'Currently pursuing a virtual internship' may be seen as redundant."
+        ]
+      },
+      {
+        "weakness": "Unclear employment gap",
+        "category": "formatting|missing_info",
+        "severity": "minor",
+        "location": "Experience",
+        "impact": "Affects credibility and professionalism.",
+        "fix": "Consider adding a brief explanation for the employment gap.",
+        "confidence": 60,
+        "examples": [
+          "The resume does not specify the reason for the employment gap."
+        ]
       }
     ]
   },
   "skills": {
-    "summary": "The candidate has a solid foundation in computer science and engineering with expertise in backend development, systems programming, IoT, and networking.",
+    "summary": "Muhammad Rishal P Kannur has a diverse skill set, including programming languages, frameworks, tools, databases, platforms, methodologies, soft skills, domain expertise, certifications, and technologies.",
     "technical": [
       {
         "skill": "Python",
-        "proficiency": "advanced"
+        "proficiency": "advanced",
+        "mentioned_context": "Resume Analysis and Job Recommendation system"
       },
       {
         "skill": "Node.js",
-        "proficiency": "intermediate"
+        "proficiency": "intermediate",
+        "mentioned_context": "Backend & Systems"
+      },
+      {
+        "skill": "Spring Boot",
+        "proficiency": "beginner",
+        "mentioned_context": "Backend & Systems"
+      },
+      {
+        "skill": "REST APIs",
+        "proficiency": "advanced",
+        "mentioned_context": "Backend & Systems"
+      },
+      {
+        "skill": "Flutter",
+        "proficiency": "intermediate",
+        "mentioned_context": "Smart Home Automation \u2013 Habitat"
+      },
+      {
+        "skill": "React",
+        "proficiency": "beginner",
+        "mentioned_context": "Frontend"
+      },
+      {
+        "skill": "Streamlit",
+        "proficiency": "advanced",
+        "mentioned_context": "Resume Analysis and Job Recommendation system"
+      },
+      {
+        "skill": "SQL",
+        "proficiency": "intermediate",
+        "mentioned_context": "Databases"
+      },
+      {
+        "skill": "JavaScript",
+        "proficiency": "beginner",
+        "mentioned_context": "Frontend"
+      },
+      {
+        "skill": "NASM Assembly",
+        "proficiency": "advanced",
+        "mentioned_context": "Rumbly (Run Assembly)"
+      },
+      {
+        "skill": "IoT systems",
+        "proficiency": "intermediate",
+        "mentioned_context": "Networking, IoT & Security"
+      },
+      {
+        "skill": "Network supervision",
+        "proficiency": "advanced",
+        "mentioned_context": "Networking, IoT & Security"
+      },
+      {
+        "skill": "Docker",
+        "proficiency": "beginner",
+        "mentioned_context": "DevOps & OS"
+      },
+      {
+        "skill": "Git",
+        "proficiency": "intermediate",
+        "mentioned_context": "DevOps & OS"
+      },
+      {
+        "skill": "GitHub",
+        "proficiency": "advanced",
+        "mentioned_context": "DevOps & OS"
       }
     ],
     "soft_skills": [
       {
         "skill": "Leadership",
-        "proficiency": "intermediate"
+        "proficiency": "advanced",
+        "mentioned_context": ""
+      },
+      {
+        "skill": "Communication",
+        "proficiency": "intermediate",
+        "mentioned_context": ""
       }
     ]
   },
   "suggestions": {
-    "summary": "To further improve, the candidate should focus on clarifying employment gaps, adding quantifiable achievements, and tailoring their skills to the target role.",
+    "summary": "To improve the resume, consider adding quantifiable achievements in experience, improving formatting and clarity, and enhancing relevant certifications.",
     "priority_improvements": [
       {
-        "improvement": "Add a professional email address, phone number, and LinkedIn profile link in Contact Information section",
+        "improvement": "Add a professional email address or phone number to contact information.",
         "priority": "high",
-        "impact": "Improved contact information for employers.",
-        "timeline": "Immediate action required"
+        "impact": "Enhances professionalism and ease of communication.",
+        "timeline": "Within the next 24 hours"
       },
       {
-        "improvement": "Improve bullet points, use clear language, and add relevant keywords in Summary section",
+        "improvement": "Include specific numbers or metrics to demonstrate achievements in experience.",
         "priority": "medium",
-        "impact": "Improved summary for quick grasping of background and experience.",
-        "timeline": "Short-term improvement"
+        "impact": "Improves credibility and impact.",
+        "timeline": "Within the next week"
+      },
+      {
+        "improvement": "Improve bullet point spacing and use a clear format for education section.",
+        "priority": "low",
+        "impact": "Enhances readability and clarity.",
+        "timeline": "Within the next two weeks"
       }
     ]
   },
   "cached": false,
-  "overall_score": 85
+  "overall_score": 58
 }
