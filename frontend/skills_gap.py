@@ -6,6 +6,203 @@ from utils.database import get_user_by_email, save_skills_gap_analysis, get_skil
 import plotly.graph_objects as go
 import plotly.express as px
 
+def _normalize_gap_analysis(analysis: dict) -> dict:
+    """Normalize LLM or DB record into a consistent shape for rendering.
+    Expected output keys: summary, present_skills, missing_critical_skills, skill_recommendations,
+    learning_roadmap, visualization_data, target_role, experience_level.
+    """
+    if not isinstance(analysis, dict):
+        return {}
+
+    # Pass-through: if already normalized, return as-is
+    if analysis.get("summary") and analysis.get("present_skills"):
+        return analysis
+
+    target_role = analysis.get("target_role") or analysis.get("summary", {}).get("target_role") or "Unknown"
+    experience_level = analysis.get("experience_level") or analysis.get("summary", {}).get("experience_level") or "mid"
+
+    extracted_skills = analysis.get("extracted_skills") or {}
+    industry_skills = analysis.get("industry_skills") or {}
+
+    def _infer_category_for_skill(name: str) -> str:
+        n = name.lower()
+        if any(k in n for k in ["python", "java", "c++", "c ", "typescript", "javascript", "nasm", "assembly"]):
+            return "Programming"
+        if any(k in n for k in ["sql", "mysql", "postgres", "sqlite", "mongo"]):
+            return "Database Management"
+        if any(k in n for k in ["html", "css", "react", "express", "spring", "rest api", "api", "frontend", "backend"]):
+            return "Web Development"
+        if any(k in n for k in ["docker", "kubernetes", "cloud", "aws", "azure", "gcp"]):
+            return "Cloud/DevOps"
+        if any(k in n for k in ["git", "github"]):
+            return "Version Control"
+        if any(k in n for k in ["linux", "cli", "shell"]):
+            return "System Administration"
+        if any(k in n for k in ["streamlit", "pandas", "numpy", "ml", "machine learning", "data science"]):
+            return "Data Science"
+        if any(k in n for k in ["nasm", "assembly"]):
+            return "Low-Level Programming"
+        return "Other"
+
+    # Build present skills from extracted_skills categories
+    present_skills = []
+    for category, items in extracted_skills.items():
+        if category == "summary":
+            continue
+        if isinstance(items, list):
+            for it in items:
+                if isinstance(it, dict):
+                    skill_name = it.get("skill") or str(it)
+                    proficiency = str(it.get("proficiency", "unknown")).lower()
+                else:
+                    skill_name = str(it)
+                    proficiency = "unknown"
+
+                # Determine a more specific category if the bucket is generic
+                inferred_cat = _infer_category_for_skill(skill_name)
+                cat_final = inferred_cat if category in ("technical", "soft_skills") else category
+
+                # Determine if matches a requirement based on industry skills lists
+                matches_requirement = False
+                try:
+                    if isinstance(industry_skills, dict):
+                        for v in industry_skills.values():
+                            if isinstance(v, list) and skill_name in v:
+                                matches_requirement = True
+                                break
+                except Exception:
+                    matches_requirement = False
+
+                present_skills.append({
+                    "skill": skill_name,
+                    "category": cat_final,
+                    "proficiency": proficiency,
+                    "matches_requirement": matches_requirement
+                })
+
+    missing_critical = analysis.get("missing_critical_skills") or []
+    missing_nice = analysis.get("missing_nice_to_have") or []
+    recommendations = analysis.get("skill_recommendations") or []
+
+    # Summary: use provided or compute basic one
+    summary = analysis.get("summary") or {}
+    if not summary:
+        # Compute counts
+        total_skills_found = len(present_skills)
+        missing_critical_count = len(missing_critical)
+
+        # Top categories for strengths
+        category_counts = {}
+        for s in present_skills:
+            category_counts[s["category"]] = category_counts.get(s["category"], 0) + 1
+        strength_areas = [k for k, _ in sorted(category_counts.items(), key=lambda x: x[1], reverse=True)[:3]]
+
+        # Gap areas from missing critical
+        gap_counts = {}
+        for m in missing_critical:
+            cat = m.get("category", "general")
+            gap_counts[cat] = gap_counts.get(cat, 0) + 1
+        gap_areas = [k for k, _ in sorted(gap_counts.items(), key=lambda x: x[1], reverse=True)[:3]]
+
+        # Fallback: if gap_areas empty, infer from industry skills vs present skills
+        if not gap_areas:
+            present_names_by_cat = {}
+            for s in present_skills:
+                present_names_by_cat.setdefault(s["category"], set()).add(s["skill"]) 
+            inferred_gaps = []
+            if isinstance(industry_skills, dict):
+                for cat, req_list in industry_skills.items():
+                    if not isinstance(req_list, list):
+                        continue
+                    present_set = present_names_by_cat.get(cat, set())
+                    missing_in_cat = [r for r in req_list if r not in present_set]
+                    if missing_in_cat:
+                        inferred_gaps.append(cat)
+            # Include categories from missing nice-to-have as soft gaps
+            for m in missing_nice:
+                c = m.get("category")
+                if c and c not in inferred_gaps:
+                    inferred_gaps.append(c)
+            gap_areas = inferred_gaps[:3]
+
+        # Compute must-have matches from industry skills lists
+        present_names = {str(s["skill"]).lower() for s in present_skills}
+        required_set = set()
+        if isinstance(industry_skills, dict):
+            candidate_keys = [
+                "must_have", "must-have", "required", "essential", "core_skills", "critical_skills"
+            ]
+            for k in candidate_keys:
+                v = industry_skills.get(k)
+                if isinstance(v, list):
+                    for item in v:
+                        required_set.add(str(item).lower())
+            # Nested structures like requirements: { must_have: [] }
+            nested = industry_skills.get("requirements")
+            if isinstance(nested, dict):
+                for k in candidate_keys:
+                    v = nested.get(k)
+                    if isinstance(v, list):
+                        for item in v:
+                            required_set.add(str(item).lower())
+        matching_must_have = len(present_names.intersection(required_set)) if required_set else 0
+
+        summary = {
+            "total_skills_found": total_skills_found,
+            "matching_must_have": matching_must_have,
+            "missing_critical": missing_critical_count,
+            "strength_areas": strength_areas,
+            "gap_areas": gap_areas,
+            "readiness_score": analysis.get("readiness_score", 0)
+        }
+
+    # Visualization data
+    viz = analysis.get("visualization_data") or {}
+    if not viz:
+        skills_by_category = {}
+        proficiency_distribution = {}
+        for s in present_skills:
+            skills_by_category[s["category"]] = skills_by_category.get(s["category"], 0) + 1
+            prof = s.get("proficiency", "unknown").lower()
+            proficiency_distribution[prof] = proficiency_distribution.get(prof, 0) + 1
+
+        # Map priority to severity
+        severity_map = {"high": "critical", "medium": "moderate", "low": "minor"}
+        gap_severity = {"critical": 0, "moderate": 0, "minor": 0}
+        for m in missing_critical:
+            sev = severity_map.get(str(m.get("priority", "low")).lower(), "minor")
+            gap_severity[sev] = gap_severity.get(sev, 0) + 1
+
+        viz = {
+            "skills_by_category": skills_by_category,
+            "proficiency_distribution": proficiency_distribution,
+            "gap_severity": gap_severity
+        }
+
+    # Learning roadmap
+    roadmap = analysis.get("learning_roadmap") or {}
+    if not roadmap:
+        roadmap = {
+            "immediate_focus": [m.get("skill") for m in missing_critical if str(m.get("priority", "")).lower() == "high"][:5],
+            "short_term": [m.get("skill") for m in missing_critical if str(m.get("priority", "")).lower() == "medium"][:5],
+            "long_term": [m.get("skill") for m in missing_nice if str(m.get("priority", "")).lower() == "low"][:5]
+        }
+
+    normalized = {
+        "target_role": target_role,
+        "experience_level": experience_level,
+        "db_id": analysis.get("id"),
+        "analysis_date": analysis.get("analysis_date"),
+        "summary": summary,
+        "present_skills": present_skills,
+        "missing_critical_skills": missing_critical,
+        "skill_recommendations": recommendations,
+        "learning_roadmap": roadmap,
+        "visualization_data": viz,
+    }
+
+    return normalized
+
 def skills_gap_page():
     """Skills Gap Analysis Page - Comprehensive skills analysis with recommendations."""
     
@@ -47,15 +244,35 @@ def skills_gap_page():
     with col2:
         experience_level = st.selectbox(
             "Experience Level",
-            ["junior", "mid", "senior"],
+            ["Junior", "Mid", "Senior"],
             index=1,
             help="Your current or target experience level"
         )
+
+    # Cache control
+    skip_cache = st.checkbox(
+        "Force fresh analysis (skip cache)",
+        value=False,
+        help="Turn this on to always call the LLM and ignore saved results for the same role/level."
+    )
     
-    # Analyze button
+    # Analyze button with caching (reuse last analysis for same role/level)
     if st.button("🔍 Analyze Skills Gap", type="primary", use_container_width=True):
         with st.spinner("Analyzing your skills and comparing with industry standards... This may take 2-3 minutes."):
             try:
+                # Check cached analysis for same role/level
+                if not skip_cache:
+                    # Always load the most recent cached analysis regardless of current inputs
+                    cached = get_skills_gap_analysis(user_id, limit=1)
+                    if cached:
+                        norm = _normalize_gap_analysis(cached)
+                        st.session_state['skills_gap_analysis'] = norm
+                        role_disp = norm.get('target_role', 'Unknown')
+                        lvl_disp = norm.get('experience_level', 'mid')
+                        st.success(f"✅ Loaded latest cached analysis (Role: {role_disp}, Level: {lvl_disp}).")
+                        st.rerun()
+                        return
+
                 # Get resume text and identified skills from database
                 conn = get_db_connection()
                 cursor = conn.cursor()
@@ -102,8 +319,8 @@ def skills_gap_page():
                     gap_analysis
                 )
                 
-                # Store in session state for display
-                st.session_state['skills_gap_analysis'] = gap_analysis
+                # Store in session state for display (normalized)
+                st.session_state['skills_gap_analysis'] = _normalize_gap_analysis(gap_analysis)
                 st.success("✅ Analysis complete!")
                 st.rerun()
                 
@@ -121,7 +338,7 @@ def skills_gap_page():
         # Try to load from database
         db_analysis = get_skills_gap_analysis(user_id)
         if db_analysis:
-            gap_analysis = db_analysis
+            gap_analysis = _normalize_gap_analysis(db_analysis)
             st.session_state['skills_gap_analysis'] = gap_analysis
     
     if not gap_analysis:

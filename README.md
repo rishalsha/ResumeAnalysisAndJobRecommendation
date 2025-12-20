@@ -32,7 +32,7 @@ An intelligent application that analyzes user resumes and provides personalized 
 
 ## Project Structure
 
-```
+````
 ResumeAnalysisAndJobRecommendationSystem/
 ├── app.py                          # Main Streamlit entry point
 ├── requirements.txt                # Python dependencies
@@ -44,11 +44,27 @@ ResumeAnalysisAndJobRecommendationSystem/
 │   ├── auth.py                    # Authentication & session management
 │   ├── resume_parser.py           # PDF/DOCX text extraction
 │   ├── llm_analyzer.py            # LLM-based analysis
-│   └── resume_scorer.py           # Resume scoring system (NEW)
+│   └── resume_scorer.py           # Resume scoring system
 ├── frontend/
 │   ├── __init__.py
 │   ├── pages.py                   # Page routing configuration
 │   ├── login.py                   # Login page
+│   ├── registration.py            # Registration page
+│   ├── dashboard.py               # Main dashboard
+│   ├── profile.py                 # User profile page
+│   ├── resume_analysis.py         # Resume analysis page
+│   ├── analysis.py                # Analysis results display (NEW)
+│   ├── resume_scoring.py          # Resume scoring page
+│   ├── skills_gap.py              # Skills gap analysis page
+│   ├── job_recommendations.py     # Job recommendations page
+│   └── settings.py                # User settings page
+├── utils/
+│   ├── __init__.py
+│   └── database.py                # Database connection & CRUD operations
+└── data/
+    ├── database.db                # SQLite database
+    └── resumes/                   # Uploaded resume files
+```│   ├── login.py                   # Login page
 │   ├── registration.py            # Registration page
 │   ├── dashboard.py               # Main dashboard
 │   ├── profile.py                 # User profile page
@@ -63,7 +79,7 @@ ResumeAnalysisAndJobRecommendationSystem/
 └── data/
     ├── database.db                # SQLite database
     └── resumes/                   # Uploaded resume files
-```
+````
 
 ## Setup & Installation
 
@@ -218,6 +234,138 @@ AI-powered analyzer using Ollama LLM to identify resume strengths and weaknesses
 3. (Optional) Provide job description for job matching
 4. Click analyze - results display with confidence scores
 5. Results automatically saved to database and cached
+
+---
+
+## Resume Analysis Results Page
+
+### Overview
+
+A comprehensive, visually appealing page that displays all analysis results in an easy-to-understand format with interactive charts, categorized cards, and actionable insights.
+
+### Features
+
+✨ **Overall Score Gauge** - Large circular progress indicator with color-coding
+✨ **Component Breakdown Charts** - Horizontal bar charts for each scoring dimension
+✨ **Strength Cards** - Green-themed cards with icons showing key strengths
+✨ **Weakness Cards** - Severity-colored cards with actionable improvement suggestions
+✨ **Skills Tags** - Interactive skill chips organized by category
+✨ **PDF Report Generation** - One-click PDF download of complete analysis
+✨ **Action Buttons** - Quick navigation to scoring, job matching, and re-analysis
+✨ **5 Tab Interface** - Organized views for overview, strengths, weaknesses, skills, and reports
+
+### Page Sections
+
+#### **1. Overview Tab**
+
+- Overall score gauge chart
+- Classification badge
+- Quick statistics (strength/weakness count, skill count)
+- Component score breakdown bar chart
+- Summary information and analysis timestamp
+
+#### **2. Strengths Tab**
+
+- Cards for each identified strength
+- Category and importance level badges
+- Examples from resume text
+- Expandable sections for detailed information
+- Green accent colors for positive feedback
+
+#### **3. Weaknesses Tab**
+
+- Cards for each identified weakness
+- Severity indicators (Critical 🔴, Moderate 🟠, Minor 🟡)
+- Location information showing where issue occurs
+- Actionable fix recommendations
+- Orange/red color scheme based on severity
+
+#### **4. Skills Tab**
+
+- Identified skills displayed as tags/chips
+- Recommended skills to learn in highlighted section
+- Skills organized by category (Technical, Soft Skills, Tools, etc.)
+- Visual distinction between current and needed skills
+
+#### **5. Report Tab**
+
+- PDF generation with complete analysis results
+- Download button for formatted report
+- Quick action buttons for related features
+- Next steps guidance for resume improvement
+
+### PDF Report Generation
+
+**Features:**
+
+- Comprehensive analysis summary
+- Overall score and classification
+- Component scores table
+- Top strengths and weaknesses (first 5 each)
+- Professional formatting with headers and styling
+- Generated timestamp and candidate name
+- Ready for sharing with mentors or career coaches
+
+**Requirements:**
+
+- `reportlab` library (included in requirements.txt)
+- Handles missing data gracefully
+
+### Action Buttons
+
+Located in the Report tab for easy navigation:
+
+- **Re-analyze Resume** - Go back to Resume Analysis
+- **Score Resume** - Navigate to Resume Scoring System
+- **Find Jobs** - View Job Recommendations
+- **Skills Gap Analysis** - Assess skills needed for target role
+
+### Color Coding System
+
+| Category        | Color            | Meaning                   |
+| --------------- | ---------------- | ------------------------- |
+| Excellent Score | Green (#00CC88)  | 90-100 range              |
+| Good Score      | Blue (#3366FF)   | 75-89 range               |
+| Average Score   | Yellow (#FFAA00) | 60-74 range               |
+| Poor Score      | Red (#EE4444)    | <60 range                 |
+| Critical        | 🔴 Red           | Urgent improvement needed |
+| Moderate        | 🟠 Orange        | Important to address      |
+| Minor           | 🟡 Yellow        | Nice to improve           |
+
+### Architecture
+
+**Frontend Components:**
+
+- `frontend/analysis.py` - Main analysis results display page
+- 5 tab interface for different views
+- Plotly charts for visualizations
+- Streamlit containers for card-based layouts
+
+**Visualization Functions:**
+
+- `create_overall_score_gauge()` - Gauge chart for score
+- `create_component_bars()` - Bar chart for components
+- `create_strengths_cards()` - Strength cards display
+- `create_weaknesses_cards()` - Weakness cards display
+- `create_skills_tags()` - Skills tag/chip display
+- `create_pdf_report()` - PDF generation with ReportLab
+
+**Integration:**
+
+- Retrieves data from database via `get_user_analysis()`
+- Uses Plotly for interactive charts
+- ReportLab for PDF generation
+- Streamlit components for UI
+
+### Usage Flow
+
+1. Complete resume upload in **Resume Analysis**
+2. Select analysis type and run analysis
+3. View results automatically displayed
+4. Navigate to **Analysis Results** page
+5. Explore different tabs (Overview, Strengths, etc.)
+6. Download PDF report if needed
+7. Use action buttons to improve resume or find jobs
 
 ---
 

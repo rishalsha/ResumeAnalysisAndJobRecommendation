@@ -79,10 +79,16 @@ def create_tables():
         missing_nice_to_have TEXT,
         skill_recommendations TEXT,
         readiness_score INTEGER,
+        summary_json TEXT,
         analysis_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         FOREIGN KEY (user_id) REFERENCES users (id)
     )
     """)
+    # Backfill for existing DBs: add summary_json if missing
+    try:
+        cursor.execute("ALTER TABLE skills_gap_analysis ADD COLUMN summary_json TEXT")
+    except Exception:
+        pass
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_skills_gap_user ON skills_gap_analysis (user_id)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_skills_gap_date ON skills_gap_analysis (analysis_date)")
 
@@ -247,37 +253,60 @@ def get_user_analysis(user_id):
         conn.close()
 
 def save_skills_gap_analysis(user_id, target_role, experience_level, gap_analysis_data):
-    """Save skills gap analysis to database."""
+    """Save skills gap analysis to database, caching the latest per user/role/level.
+    Ensures a single record per (user_id, target_role, experience_level) by delete+insert.
+    Also persists summary JSON to preserve metrics like matching_must_have.
+    """
     conn = get_db_connection()
     cursor = conn.cursor()
     
     try:
+        role_norm = (target_role or "Unknown").strip()
+        level_norm = (experience_level or "mid").strip()
+
         extracted_skills_json = json.dumps(gap_analysis_data.get("extracted_skills", {}))
         industry_skills_json = json.dumps(gap_analysis_data.get("industry_skills", {}))
         missing_critical_json = json.dumps(gap_analysis_data.get("missing_critical_skills", []))
         missing_nice_json = json.dumps(gap_analysis_data.get("missing_nice_to_have", []))
         recommendations_json = json.dumps(gap_analysis_data.get("skill_recommendations", []))
-        readiness_score = gap_analysis_data.get("summary", {}).get("readiness_score", 0)
-        
+        # Prefer direct readiness_score if provided; else fall back to summary
+        readiness_score = gap_analysis_data.get("readiness_score")
+        if readiness_score is None:
+            readiness_score = gap_analysis_data.get("summary", {}).get("readiness_score", 0)
+
+        # Ensure summary_json column exists (for older DBs)
+        try:
+            cursor.execute("ALTER TABLE skills_gap_analysis ADD COLUMN summary_json TEXT")
+        except Exception:
+            pass
+
+        # Delete existing cached record for this user/role/level
+        cursor.execute(
+            "DELETE FROM skills_gap_analysis WHERE user_id = ? AND LOWER(target_role) = LOWER(?) AND LOWER(experience_level) = LOWER(?)",
+            (user_id, role_norm, level_norm)
+        )
+
+        # Insert fresh record
         cursor.execute("""
             INSERT INTO skills_gap_analysis 
             (user_id, target_role, experience_level, extracted_skills, industry_skills,
-             missing_critical_skills, missing_nice_to_have, skill_recommendations, readiness_score)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+             missing_critical_skills, missing_nice_to_have, skill_recommendations, readiness_score, summary_json)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
         """, (
             user_id,
-            target_role,
-            experience_level,
+            role_norm,
+            level_norm,
             extracted_skills_json,
             industry_skills_json,
             missing_critical_json,
             missing_nice_json,
             recommendations_json,
-            readiness_score
+            readiness_score,
+            json.dumps(gap_analysis_data.get("summary", {}))
         ))
         conn.commit()
         analysis_id = cursor.lastrowid
-        logger.info(f"Skills gap analysis saved for user {user_id}, ID: {analysis_id}")
+        logger.info(f"Skills gap analysis saved (cached latest) for user {user_id}, role '{role_norm}', level '{level_norm}', ID: {analysis_id}")
         return analysis_id
     except Exception as e:
         logger.error(f"Error saving skills gap analysis: {e}")
@@ -285,28 +314,50 @@ def save_skills_gap_analysis(user_id, target_role, experience_level, gap_analysi
     finally:
         conn.close()
 
-def get_skills_gap_analysis(user_id, limit=1):
-    """Retrieve skills gap analysis for a user."""
+def get_skills_gap_analysis(user_id, limit=1, target_role: Optional[str] = None, experience_level: Optional[str] = None):
+    """Retrieve skills gap analysis for a user with optional role/level filters."""
     conn = get_db_connection()
     cursor = conn.cursor()
     
     try:
-        cursor.execute("""
+        conditions = ["user_id = ?"]
+        params = [user_id]
+
+        if target_role:
+            conditions.append("LOWER(target_role) = LOWER(?)")
+            params.append(target_role)
+        if experience_level:
+            conditions.append("LOWER(experience_level) = LOWER(?)")
+            params.append(experience_level)
+
+        where_clause = " AND ".join(conditions)
+
+        query = f"""
             SELECT id, target_role, experience_level, extracted_skills, industry_skills,
                    missing_critical_skills, missing_nice_to_have, skill_recommendations,
-                   readiness_score, analysis_date
+                   readiness_score, summary_json, analysis_date
             FROM skills_gap_analysis
-            WHERE user_id = ?
-            ORDER BY analysis_date DESC
+            WHERE {where_clause}
+            ORDER BY id DESC
             LIMIT ?
-        """, (user_id, limit))
-        
+        """
+
+        params.append(limit)
+        cursor.execute(query, tuple(params))
         rows = cursor.fetchall()
         if not rows:
             return [] if limit > 1 else None
         
         results = []
         for row in rows:
+            # Support both old and new schemas (without/with summary_json)
+            try:
+                summary_json = json.loads(row[9]) if row[9] else {}
+                analysis_date = row[10]
+            except IndexError:
+                summary_json = {}
+                analysis_date = row[9]
+
             results.append({
                 "id": row[0],
                 "target_role": row[1],
@@ -317,7 +368,8 @@ def get_skills_gap_analysis(user_id, limit=1):
                 "missing_nice_to_have": json.loads(row[6]) if row[6] else [],
                 "skill_recommendations": json.loads(row[7]) if row[7] else [],
                 "readiness_score": row[8],
-                "analysis_date": row[9]
+                "summary": summary_json,
+                "analysis_date": analysis_date
             })
         
         return results if limit > 1 else results[0]
