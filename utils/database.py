@@ -4,6 +4,7 @@ import os
 import json
 import logging
 from datetime import datetime
+from typing import Optional
 
 # Configure logging
 logger = logging.getLogger(__name__)
@@ -104,6 +105,26 @@ def create_tables():
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_user_id_jobs ON job_recommendations (user_id)")
     cursor.execute("CREATE INDEX IF NOT EXISTS idx_email ON users (email)")
 
+    # Resume Scoring History table
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS resume_scores (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        overall_score INTEGER NOT NULL,
+        classification TEXT NOT NULL,
+        completeness_score INTEGER,
+        content_quality_score INTEGER,
+        formatting_score INTEGER,
+        keyword_relevance_score INTEGER,
+        experience_score INTEGER,
+        component_scores TEXT,
+        improvement_suggestions TEXT,
+        scoring_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (user_id) REFERENCES users (id)
+    )
+    """)
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_resume_scores_user ON resume_scores (user_id)")
+    cursor.execute("CREATE INDEX IF NOT EXISTS idx_resume_scores_timestamp ON resume_scores (scoring_timestamp)")
 
     conn.commit()
     conn.close()
@@ -306,6 +327,153 @@ def get_skills_gap_analysis(user_id, limit=1):
     finally:
         conn.close()
 
-if __name__ == '__main__':
-    create_tables()
-    print("Database tables created successfully.")
+
+# ==================== Resume Scoring Functions ====================
+
+def save_resume_score(user_id: int, scoring_result: dict) -> Optional[int]:
+    """Save resume scoring result to database.
+    
+    Args:
+        user_id: User ID
+        scoring_result: Dictionary with scoring results from ResumeScorer
+        
+    Returns:
+        Score ID or None if error
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        # Extract component scores
+        component_scores = scoring_result.get("component_scores", {})
+        
+        # Build component scores JSON
+        component_scores_json = json.dumps(component_scores)
+        improvement_suggestions = json.dumps(scoring_result.get("improvement_suggestions", []))
+        
+        cursor.execute("""
+            INSERT INTO resume_scores 
+            (user_id, overall_score, classification, completeness_score, content_quality_score, 
+             formatting_score, keyword_relevance_score, experience_score, component_scores, improvement_suggestions)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        """, (
+            user_id,
+            scoring_result.get("overall_score", 0),
+            scoring_result.get("classification", "Unknown"),
+            component_scores.get("completeness", {}).get("score", 0),
+            component_scores.get("content_quality", {}).get("score", 0),
+            component_scores.get("formatting", {}).get("score", 0),
+            component_scores.get("keyword_relevance", {}).get("score", 0),
+            component_scores.get("experience", {}).get("score", 0),
+            component_scores_json,
+            improvement_suggestions
+        ))
+        
+        conn.commit()
+        score_id = cursor.lastrowid
+        logger.info(f"Resume score saved successfully for user {user_id}, ID: {score_id}")
+        return score_id
+    except Exception as e:
+        logger.error(f"Error saving resume score: {e}")
+        return None
+    finally:
+        conn.close()
+
+
+def get_resume_scores(user_id: int, limit: int = 10) -> list:
+    """Retrieve resume scoring history for a user.
+    
+    Args:
+        user_id: User ID
+        limit: Number of recent scores to retrieve
+        
+    Returns:
+        List of scoring results, most recent first
+    """
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    
+    try:
+        cursor.execute("""
+            SELECT id, overall_score, classification, completeness_score, content_quality_score,
+                   formatting_score, keyword_relevance_score, experience_score, component_scores,
+                   improvement_suggestions, scoring_timestamp
+            FROM resume_scores
+            WHERE user_id = ?
+            ORDER BY scoring_timestamp DESC
+            LIMIT ?
+        """, (user_id, limit))
+        
+        rows = cursor.fetchall()
+        results = []
+        
+        for row in rows:
+            try:
+                component_scores = json.loads(row[8]) if row[8] else {}
+                improvement_suggestions = json.loads(row[9]) if row[9] else []
+            except json.JSONDecodeError:
+                component_scores = {}
+                improvement_suggestions = []
+            
+            results.append({
+                "id": row[0],
+                "overall_score": row[1],
+                "classification": row[2],
+                "completeness_score": row[3],
+                "content_quality_score": row[4],
+                "formatting_score": row[5],
+                "keyword_relevance_score": row[6],
+                "experience_score": row[7],
+                "component_scores": component_scores,
+                "improvement_suggestions": improvement_suggestions,
+                "scoring_timestamp": row[10]
+            })
+        
+        return results
+    except Exception as e:
+        logger.error(f"Error retrieving resume scores: {e}")
+        return []
+    finally:
+        conn.close()
+
+
+def get_latest_resume_score(user_id: int) -> Optional[dict]:
+    """Get the most recent resume score for a user.
+    
+    Args:
+        user_id: User ID
+        
+    Returns:
+        Latest scoring result or None
+    """
+    scores = get_resume_scores(user_id, limit=1)
+    return scores[0] if scores else None
+
+
+def get_score_statistics(user_id: int) -> Optional[dict]:
+    """Get scoring statistics for a user to show improvement over time.
+    
+    Args:
+        user_id: User ID
+        
+    Returns:
+        Dictionary with statistics
+    """
+    scores = get_resume_scores(user_id, limit=100)
+    
+    if not scores:
+        return None
+    
+    overall_scores = [s["overall_score"] for s in scores]
+    
+    return {
+        "total_evaluations": len(scores),
+        "current_score": scores[0]["overall_score"],
+        "average_score": sum(overall_scores) / len(overall_scores) if overall_scores else 0,
+        "best_score": max(overall_scores) if overall_scores else 0,
+        "worst_score": min(overall_scores) if overall_scores else 0,
+        "score_trend": overall_scores[:10],  # Last 10 scores for trend
+        "improvement": overall_scores[0] - overall_scores[-1] if len(overall_scores) > 1 else 0
+    }
+
+

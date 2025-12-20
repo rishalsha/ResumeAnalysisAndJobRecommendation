@@ -79,12 +79,12 @@ def dashboard_page():
             if st.button("📤 Upload Your Resume"):
                 st.session_state['show_resume_uploader'] = True
                 st.rerun()
+   
     with col2:
         if has_resume:
             if st.button("🔍 Analyze Your Resume"):
                 st.session_state['page'] = 'Resume Analysis'
                 st.rerun()
-
 
     # Uploader or delete area occupies the same section position
     if not has_resume:
@@ -104,7 +104,7 @@ def dashboard_page():
                     st.write(f"- **Name:** {uploaded_file.name}")
                     st.write(f"- **Size:** {round(uploaded_file.size / 1024, 2)} KB")
                     
-                    if st.button("Upload and Analyze Resume"):
+                    if st.button("Upload Resume"):
                         with st.spinner("Uploading and parsing your resume..."):
                             file_extension = os.path.splitext(uploaded_file.name)[1]
                             unique_filename = f"{user_id}_{int(time.time())}{file_extension}"

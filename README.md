@@ -19,6 +19,7 @@ An intelligent application that analyzes user resumes and provides personalized 
 ✅ **Resume Upload**: Support for PDF and DOCX file formats with validation
 ✅ **Text Extraction**: Automatic text extraction from resume files
 ✅ **Resume Analysis**: AI-powered analysis using Ollama LLM with strengths/weaknesses detection
+✅ **Resume Scoring System**: Comprehensive multi-factor scoring with detailed breakdown (NEW)
 ✅ **Skills Gap Analysis**: Comprehensive skills extraction, industry comparison, and personalized learning roadmap
 ✅ **Intelligent Caching**: Two-level cache (memory + disk) to avoid re-analyzing identical resumes
 ✅ **Confidence Scoring**: 0-100% confidence scores on all analyses
@@ -41,7 +42,9 @@ ResumeAnalysisAndJobRecommendationSystem/
 ├── backend/
 │   ├── __init__.py
 │   ├── auth.py                    # Authentication & session management
-│   └── resume_parser.py           # PDF/DOCX text extraction
+│   ├── resume_parser.py           # PDF/DOCX text extraction
+│   ├── llm_analyzer.py            # LLM-based analysis
+│   └── resume_scorer.py           # Resume scoring system (NEW)
 ├── frontend/
 │   ├── __init__.py
 │   ├── pages.py                   # Page routing configuration
@@ -50,7 +53,8 @@ ResumeAnalysisAndJobRecommendationSystem/
 │   ├── dashboard.py               # Main dashboard
 │   ├── profile.py                 # User profile page
 │   ├── resume_analysis.py         # Resume analysis page
-│   ├── skills_gap.py              # Skills gap analysis page (NEW)
+│   ├── resume_scoring.py          # Resume scoring page (NEW)
+│   ├── skills_gap.py              # Skills gap analysis page
 │   ├── job_recommendations.py     # Job recommendations page
 │   └── settings.py                # User settings page
 ├── utils/
@@ -217,6 +221,185 @@ AI-powered analyzer using Ollama LLM to identify resume strengths and weaknesses
 
 ---
 
+## Resume Scoring System
+
+### Overview
+
+Comprehensive scoring system that evaluates resumes on multiple criteria using a weighted multi-factor algorithm combined with LLM-based analysis. Provides detailed breakdown, improvement suggestions, and tracks scoring history for progress monitoring.
+
+### Scoring Components
+
+The system evaluates resumes across 5 dimensions with specific weights:
+
+#### **1. Completeness Score (25%)**
+
+- Evaluates presence of essential resume sections
+- Checks for: contact info, professional summary, work experience, education, skills
+- Each section identified adds points toward score
+- Missing sections get identified for improvement
+
+#### **2. Content Quality Score (30%)** - Highest Weight
+
+- Uses LLM to analyze achievement statements and professionalism
+- Counts action verbs (led, created, developed, improved, etc.)
+- Identifies quantifiable metrics (20% increase, $500K savings, etc.)
+- Evaluates relevance and impact of accomplishments
+- Combines LLM assessment (60%) with manual metrics (40%)
+
+#### **3. Formatting Score (15%)**
+
+- Evaluates document length (optimal: 400-2000 words)
+- Checks formatting consistency (bullet points, spacing, structure)
+- Assesses section clarity and organization
+- Reviews special character usage for cleanliness
+
+#### **4. Keyword Relevance Score (20%)**
+
+- Identifies industry-specific and technical keywords
+- Compares found vs. expected keywords for target role
+- Detects common tech skills (Python, AWS, React, etc.)
+- Provides suggestions for missing keywords
+
+#### **5. Experience Score (10%)**
+
+- Extracts and validates years of experience
+- Assesses career progression (entry → mid → senior)
+- Evaluates coherence and relevance of career path
+- Uses LLM to validate experience quality
+
+### Classification System
+
+Resumes are classified into 4 tiers based on overall score:
+
+- **Excellent (90-100)** 🌟 - Outstanding resume, ready for applications
+- **Good (75-89)** 👍 - Solid resume, minor improvements possible
+- **Average (60-74)** ⚠️ - Functional resume, significant improvements needed
+- **Needs Improvement (<60)** 📍 - Critical issues to address
+
+### Features
+
+✨ **Multi-Factor Analysis**: 5 weighted components for comprehensive evaluation
+✨ **LLM-Powered Assessment**: AI analyzes content quality, structure, and relevance
+✨ **Detailed Breakdown**: Component-by-component scores with visual charts
+✨ **Improvement Suggestions**: Personalized, actionable recommendations
+✨ **Score Tracking**: Historical scores to monitor improvements over time
+✨ **Trend Analysis**: Visual charts showing score progression
+✨ **Statistical Insights**: Current, best, average, and improvement metrics
+✨ **Interactive Dashboard**: 4 tabs for scoring, breakdown, history, and tips
+
+### Frontend Pages
+
+Navigate to **Resume Scoring** page for:
+
+1. **Score Your Resume Tab**
+
+   - Upload/select resume to score
+   - Optional target role keywords input
+   - Real-time scoring with LLM analysis
+
+2. **Score Breakdown Tab**
+
+   - Gauge chart of overall score with classification
+   - Bar chart showing component scores with weights
+   - Radar chart for multi-dimensional view
+   - Expandable detailed analysis for each component
+
+3. **Score History Tab**
+
+   - Statistics: current, best, average, improvement
+   - Trend chart showing score progression over evaluations
+   - Historical table with all evaluation records
+   - Track improvement over time
+
+4. **Improvement Tips Tab**
+   - Personalized suggestions based on scores
+   - Priority-ranked improvement areas
+   - Component-specific action items
+   - General best practices for resume writing
+
+### Database Schema
+
+```sql
+CREATE TABLE resume_scores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    overall_score INTEGER NOT NULL,
+    classification TEXT NOT NULL,
+    completeness_score INTEGER,
+    content_quality_score INTEGER,
+    formatting_score INTEGER,
+    keyword_relevance_score INTEGER,
+    experience_score INTEGER,
+    component_scores TEXT,           -- JSON with all component details
+    improvement_suggestions TEXT,    -- JSON array of suggestions
+    scoring_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+)
+```
+
+### Usage Flow
+
+1. Upload resume in **Resume Analysis** section
+2. Navigate to **Resume Scoring** page
+3. (Optional) Enter target role keywords for relevance
+4. Click "Score Resume Now"
+5. View detailed breakdown with component scores
+6. Review improvement recommendations
+7. Check score history to track progress
+8. Make improvements and re-score to see progress
+
+### Backend Implementation
+
+**ResumeScorer Class** (`backend/resume_scorer.py`)
+
+Key methods:
+
+- `score_resume()` - Main scoring orchestrator
+- `calculate_completeness_score()` - Section presence check
+- `calculate_content_quality_score()` - LLM-based content analysis
+- `calculate_formatting_score()` - Document format evaluation
+- `calculate_keyword_relevance_score()` - Keyword detection
+- `calculate_experience_score()` - Career analysis
+- `_generate_improvement_suggestions()` - Personalized tips
+
+Database functions (`utils/database.py`):
+
+- `save_resume_score()` - Store scoring results
+- `get_resume_scores()` - Retrieve history (latest N)
+- `get_latest_resume_score()` - Get most recent score
+- `get_score_statistics()` - Calculate trends and metrics
+
+### Example Output
+
+```json
+{
+  "overall_score": 78,
+  "classification": "Good",
+  "timestamp": "2024-12-20T10:30:45.123456",
+  "component_scores": {
+    "completeness": {
+      "score": 100,
+      "weight": 0.25,
+      "weighted_score": 25,
+      "details": { ... }
+    },
+    "content_quality": {
+      "score": 72,
+      "weight": 0.30,
+      "weighted_score": 22,
+      "details": { ... }
+    },
+    ...
+  },
+  "improvement_suggestions": [
+    "Improve content quality by using more action verbs...",
+    "Include more industry-relevant keywords..."
+  ]
+}
+```
+
+---
+
 ## LLM Setup
 
 ### Environment Configuration (.env)
@@ -253,12 +436,14 @@ All LLM integration packages are in `requirements.txt`:
 ✅ User authentication with bcrypt password hashing
 ✅ Resume upload & text extraction (PDF/DOCX)
 ✅ Resume analysis with AI-powered strengths & weaknesses detection
+✅ **Resume Scoring System** with multi-factor weighted evaluation
 ✅ Intelligent caching system for performance
 ✅ Database storage with JSON serialization
 ✅ User dashboard with navigation
 ✅ Profile management & settings pages
 ✅ Job recommendations engine
 ✅ Token tracking & retry logic
+✅ Score tracking and trend analysis
 
 ## Database Schema
 
@@ -288,6 +473,26 @@ CREATE TABLE resume_analysis (
     identified_skills TEXT,
     recommended_skills TEXT,
     analysis_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+)
+```
+
+### Resume Scores Table
+
+```sql
+CREATE TABLE resume_scores (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    overall_score INTEGER NOT NULL,
+    classification TEXT NOT NULL,
+    completeness_score INTEGER,
+    content_quality_score INTEGER,
+    formatting_score INTEGER,
+    keyword_relevance_score INTEGER,
+    experience_score INTEGER,
+    component_scores TEXT,
+    improvement_suggestions TEXT,
+    scoring_timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users (id)
 )
 ```
