@@ -647,39 +647,40 @@ def analysis_page():
     # ==================== Tab 5: Report ====================
     with tab5:
         st.header("📄 Generate Report")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write("Download a comprehensive PDF report with all your analysis results.")
-            if HAS_REPORTLAB:
-                if st.button("📥 Download PDF Report", use_container_width=True, type="primary"):
-                    pdf_file = create_pdf_report(report_data, user_name)
-                    if pdf_file:
-                        st.download_button(
-                            label="📄 Click to Download",
-                            data=pdf_file,
-                            file_name=f"resume_analysis_{user_name.replace(' ', '_')}.pdf",
-                            mime="application/pdf"
-                        )
-                        st.success("✅ PDF generated successfully!")
-            else:
-                st.warning("PDF generation not available. Install reportlab: `pip install reportlab`")
-        with col2:
-            st.write("**Action Buttons:**")
-            col_a, col_b = st.columns(2)
-            with col_a:
-                if st.button("🔄 Re-analyze Resume", use_container_width=True):
-                    st.info("Redirecting to Resume Analysis...")
-                    st.markdown("[Go to Resume Analysis →](/?page=Resume%20Analysis)")
-                if st.button("💼 Find Jobs", use_container_width=True):
-                    st.info("Redirecting to Job Recommendations...")
-                    st.markdown("[Go to Job Recommendations →](/?page=Job%20Recommendations)")
-            with col_b:
-                if st.button("✅ Score Resume", use_container_width=True):
-                    st.info("Redirecting to Resume Scoring...")
-                    st.markdown("[Go to Resume Scoring →](/?page=Resume%20Scoring)")
-                if st.button("📊 Skills Gap Analysis", use_container_width=True):
-                    st.info("Redirecting to Skills Gap Analysis...")
-                    st.markdown("[Go to Skills Gap Analysis →](/?page=Skills%20Gap%20Analysis)")
+        st.write("Download a comprehensive PDF report with all your analysis results.")
+        if HAS_REPORTLAB:
+            if st.button("📥 Download PDF Report", use_container_width=True, type="primary"):
+                pdf_file = create_pdf_report(report_data, user_name)
+                if pdf_file:
+                    st.download_button(
+                        label="📄 Click to Download",use_container_width=True,
+                        data=pdf_file,
+                        file_name=f"resume_analysis_{user_name.replace(' ', '_')}.pdf",
+                        mime="application/pdf"
+                    )
+                    st.success("✅ PDF generated successfully!")
+        else:
+            st.warning("PDF generation not available. Install reportlab: `pip install reportlab`")
+
+        st.write("**Quick Navigation:**")
+        nav1, nav2, nav3, nav4 = st.columns(4)
+        with nav1:
+            if st.button("🔄 Re-analyze Resume", use_container_width=True):
+                st.session_state['page'] = 'Resume Analysis'
+                st.rerun()
+        with nav2:
+            if st.button("💼 Find Jobs", use_container_width=True):
+                st.session_state['page'] = 'Job Recommendations'
+                st.rerun()
+        with nav3:
+            if st.button("✅ Score Resume", use_container_width=True):
+                st.session_state['page'] = 'Resume Scoring'
+                st.rerun()
+        with nav4:
+            if st.button("📊 Skills Gap Analysis", use_container_width=True):
+                st.session_state['page'] = 'Skills Gap Analysis'
+                st.rerun()
+
         st.divider()
         st.subheader("💡 Next Steps")
         st.markdown("""
