@@ -1,256 +1,215 @@
 {
   "strengths": {
-    "summary": "Muhammad Rishal has a strong educational background in Computer Science and Engineering, with hands-on experience in backend development, systems programming, IoT, and government IT operations.",
+    "summary": "The candidate has a strong educational background in Computer Science and Engineering, with hands-on experience in backend development, systems programming, IoT, and government IT operations.",
     "items": [
       {
-        "strength": "Clear formatting and organization",
-        "category": "content|formatting",
+        "strength": "Relevant coursework in Data Structures, OOP, DBMS, Operating Systems",
+        "category": "education|content",
         "importance": "critical",
         "confidence": 90,
         "examples": [
-          "Professional Summary section",
-          "Experience and Projects sections"
-        ],
-        "location": "Resume structure"
-      },
-      {
-        "strength": "Relevant experience in backend development, systems programming, IoT, and government IT operations",
-        "category": "experience|skills",
-        "importance": "high",
-        "confidence": 95,
-        "examples": [
-          "Virtual Internship at Infosys",
-          "Network Supervisor & Digital Signature Project Coordinator at KELTRON"
-        ],
-        "location": "Experience section"
-      },
-      {
-        "strength": "Quantifiable achievements in developing a Resume Analysis and Job Recommendation system using Python and Streamlit",
-        "category": "achievements|experience",
-        "importance": "high",
-        "confidence": 90,
-        "examples": [
-          "Developing a Resume Analysis and Job Recommendation system"
-        ],
-        "location": "Experience section"
-      },
-      {
-        "strength": "Strong foundation in electronics, networking, and low-level programming from Electronics and Communication Engineering diploma",
-        "category": "education|skills",
-        "importance": "medium",
-        "confidence": 85,
-        "examples": [
-          "Diploma in Electronics and Communication Engineering"
+          "Relevant coursework: Data Structures, OOP, DBMS, Operating Systems"
         ],
         "location": "Education section"
       },
       {
-        "strength": "Domain expertise in IoT, network supervision, and system configuration from experience at KELTRON and SFO Technologies",
+        "strength": "Hands-on experience in backend development and systems programming through virtual internship with Infosys Springboard",
         "category": "experience|skills",
-        "importance": "medium",
+        "importance": "high",
         "confidence": 80,
         "examples": [
-          "Network Supervisor & Digital Signature Project Coordinator",
-          "Production Technician - Wire Harnessing"
+          "Remote Software Development Intern (Ongoing) 2025 \u2013 Present"
         ],
         "location": "Experience section"
       },
       {
-        "strength": "Action verbs like \"Managed\", \"Coordinated\", and \"Provided\" in the Experience section",
-        "category": "content|formatting",
+        "strength": "Strong foundation in electronics, networking, and low-level programming due to diploma in Electronics and Communication Engineering",
+        "category": "education|content",
         "importance": "medium",
         "confidence": 70,
         "examples": [
-          "Network Supervisor & Digital Signature Project Coordinator experience"
+          "Diploma \u2013 Electronics and Communication Engineering (CGPA: 8.77)"
+        ],
+        "location": "Education section"
+      },
+      {
+        "strength": "Action verbs such as 'Developing', 'Implementing', and 'Managed' demonstrate the candidate's ability to take initiative",
+        "category": "experience|formatting",
+        "importance": "medium",
+        "confidence": 60,
+        "examples": [
+          "Remote Software Development Intern (Ongoing) 2025 \u2013 Present"
         ],
         "location": "Experience section"
       },
       {
-        "strength": "Certification from Government Engineering College, Kannur with a CGPA of 8.77",
-        "category": "education|certifications",
+        "strength": "Proficient in multiple programming languages, including Python, Java, and C, as well as relevant frameworks such as Node.js and Express.js",
+        "category": "skills|technical",
         "importance": "medium",
-        "confidence": 60,
+        "confidence": 50,
         "examples": [
-          "CGPA: 8.77"
+          "Languages:Python, C, Java, SQL"
+        ],
+        "location": "Technical Skills section"
+      },
+      {
+        "strength": "Experience in IoT systems and network supervision through projects such as Smart Home Automation and RFID Based Attendance System",
+        "category": "experience|skills",
+        "importance": "medium",
+        "confidence": 40,
+        "examples": [
+          "Smart Home Automation \u2013 Habitat (ESP32, Tasmota, Flutter)"
+        ],
+        "location": "Projects section"
+      },
+      {
+        "strength": "Strong educational background in Electronics and Communication Engineering, with a CGPA of 8.77",
+        "category": "education|content",
+        "importance": "low",
+        "confidence": 30,
+        "examples": [
+          "Diploma \u2013 Electronics and Communication Engineering (CGPA: 8.77)"
         ],
         "location": "Education section"
       },
       {
-        "strength": "Strong educational background in Computer Science and Engineering with a focus on electronics, networking, embedded systems, and low-level software",
-        "category": "education|skills",
-        "importance": "high",
-        "confidence": 85,
+        "strength": "Domain expertise in IoT systems, network supervision, and low-level programming through relevant coursework and projects",
+        "category": "skills|technical",
+        "importance": "low",
+        "confidence": 20,
         "examples": [
-          "B.Tech \u2013 Computer Science and Engineering",
-          "Diploma in Electronics and Communication Engineering"
+          "IoT systems, network supervision, sandboxed execution"
         ],
         "location": "Education section"
+      },
+      {
+        "strength": "Strong formatting, with clear section headings and bullet points used consistently throughout the resume",
+        "category": "formatting|content",
+        "importance": "low",
+        "confidence": 10,
+        "examples": [
+          "Professional Summary",
+          "Experience"
+        ],
+        "location": "Resume structure"
       }
     ]
   },
   "weaknesses": {
-    "summary": "Muhammad Rishal's resume could benefit from additional details, such as a clear contact email or phone number, to make it more accessible.",
+    "summary": "The candidate's resume could benefit from some improvements, including missing contact information and a lack of quantifiable achievements.",
     "items": [
       {
-        "weakness": "Missing contact information",
-        "category": "formatting|missing_info",
+        "weakness": "Missing contact information for phone number or email address",
+        "category": "formatting|content",
         "severity": "critical",
         "location": "Contact Information section",
-        "impact": "Candidate's contact information is not readily available.",
-        "fix": "Add a clear and concise contact email or phone number to the top of the resume.",
+        "impact": "Difficulty in making initial contact with the candidate",
+        "fix": "Add phone number and/or email address to the resume",
         "confidence": 80,
         "examples": [
-          "No clear contact email or phone number"
+          "\u2014 +91 8138058739"
         ]
       },
       {
-        "weakness": "Spelling/grammar errors in some sections",
+        "weakness": "Lack of quantifiable achievements, such as specific numbers or metrics achieved in previous roles",
+        "category": "experience|content",
+        "severity": "moderate",
+        "location": "Experience section",
+        "impact": "Difficulty in assessing the candidate's impact and value",
+        "fix": "Include specific numbers or metrics achieved in previous roles",
+        "confidence": 60,
+        "examples": [
+          "None provided"
+        ]
+      },
+      {
+        "weakness": "Irrelevant information, such as hobbies or interests, included in the resume",
         "category": "formatting|content",
         "severity": "minor",
-        "location": "Summary section and Projects section",
-        "impact": "Minor errors that could be improved.",
-        "fix": "Carefully proofread the resume to catch any spelling or grammar errors.",
-        "confidence": 60,
-        "examples": [
-          "'CGPA: 8.77' should be 'CGPA: 8.77'"
-        ]
-      },
-      {
-        "weakness": "Lack of quantifiable achievements in some roles",
-        "category": "experience|achievements",
-        "severity": "low",
-        "location": "Production Technician - Wire Harnessing role at SFO Technologies",
-        "impact": "Limited information about the candidate's experience.",
-        "fix": "Try to include more specific details or metrics about achievements in future roles.",
+        "location": "Resume structure",
+        "impact": "Clutter and distractions in the resume",
+        "fix": "Remove irrelevant information from the resume",
         "confidence": 40,
         "examples": [
-          "No specific numbers or percentages mentioned"
+          "Hobbies: None"
         ]
       },
       {
-        "weakness": "Irrelevant information in the Projects section",
-        "category": "content|formatting",
+        "weakness": "Poor formatting, with inconsistent use of bullet points and section headings",
+        "category": "formatting|content",
         "severity": "minor",
-        "location": "Projects section",
-        "impact": "Some projects may be less relevant to the target role.",
-        "fix": "Consider removing or consolidating less relevant projects to make room for more impactful ones.",
-        "confidence": 50,
+        "location": "Resume structure",
+        "impact": "Difficulty in scanning the resume",
+        "fix": "Consistency in formatting throughout the resume",
+        "confidence": 30,
         "examples": [
-          "Smart Car Parking System and RFID Based Attendance System"
+          "Some bullet points lack proper indentation"
         ]
       },
       {
-        "weakness": "Poor formatting in the Technical Skills section",
-        "category": "formatting|skills",
-        "severity": "low",
-        "location": "Technical Skills section",
-        "impact": "The list could be more visually appealing.",
-        "fix": "Consider using a consistent formatting style for the skills list.",
-        "confidence": 40,
-        "examples": [
-          "Some skills are listed in bullet points, while others are not."
-        ]
-      },
-      {
-        "weakness": "Missing key skills for target role",
+        "weakness": "Missing key skills for target role, such as cybersecurity or data analytics expertise",
         "category": "skills|missing_info",
-        "severity": "critical",
-        "location": "Technical Skills section",
-        "impact": "The candidate may be missing essential skills for the target role.",
-        "fix": "Make sure to include all relevant technical skills required for the target role.",
-        "confidence": 60,
+        "severity": "minor",
+        "location": "Skills section",
+        "impact": "Difficulty in assessing the candidate's fit for certain roles",
+        "fix": "Include relevant certifications or training programs to address this gap",
+        "confidence": 20,
         "examples": [
-          "No specific details about the required skills"
+          "None provided"
+        ]
+      },
+      {
+        "weakness": "Unexplained employment gaps, such as a period of unemployment between internships",
+        "category": "experience|content",
+        "severity": "minor",
+        "location": "Experience section",
+        "impact": "Difficulty in assessing the candidate's work history and stability",
+        "fix": "Provide clear explanations for any employment gaps",
+        "confidence": 10,
+        "examples": [
+          "None provided"
         ]
       }
     ]
   },
   "skills": {
-    "summary": "Muhammad Rishal has a diverse skill set, including programming languages, frameworks, tools, databases, platforms, methodologies, soft skills, domain expertise, certifications, and technologies.",
+    "summary": "The candidate has a strong skill profile, with expertise in multiple programming languages, frameworks, and tools.",
     "technical": [
       {
         "skill": "Python",
         "proficiency": "advanced"
       },
       {
-        "skill": "C",
+        "skill": "Java",
         "proficiency": "intermediate"
       },
       {
-        "skill": "Java",
+        "skill": "C",
         "proficiency": "beginner"
-      },
-      {
-        "skill": "SQL",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "JavaScript",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "NASM Assembly",
-        "proficiency": "advanced"
       },
       {
         "skill": "Node.js",
-        "proficiency": "intermediate"
-      },
-      {
-        "skill": "TypeScript",
-        "proficiency": "beginner"
+        "proficiency": "advanced"
       },
       {
         "skill": "Express.js",
+        "proficiency": "advanced"
+      },
+      {
+        "skill": "SQL",
         "proficiency": "intermediate"
       },
       {
-        "skill": "Spring Boot",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "REST APIs",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "Flutter",
+        "skill": "JavaScript",
         "proficiency": "intermediate"
       },
       {
-        "skill": "React",
-        "proficiency": "beginner"
-      },
-      {
-        "skill": "Streamlit",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "HTML",
-        "proficiency": "basic"
-      },
-      {
-        "skill": "CSS",
-        "proficiency": "basic"
-      },
-      {
-        "skill": "SQLite",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "MySQL",
-        "proficiency": "intermediate"
-      },
-      {
-        "skill": "PostgreSQL",
-        "proficiency": "advanced"
-      },
-      {
-        "skill": "MongoDB",
+        "skill": "NASM Assembly",
         "proficiency": "beginner"
       },
       {
         "skill": "Docker",
-        "proficiency": "advanced"
+        "proficiency": "beginner"
       },
       {
         "skill": "Git",
@@ -266,13 +225,13 @@
       },
       {
         "skill": "Neovim",
-        "proficiency": "beginner"
+        "proficiency": "intermediate"
       }
     ],
     "soft_skills": [
       {
         "skill": "Leadership",
-        "proficiency": "beginner"
+        "proficiency": "advanced"
       },
       {
         "skill": "Communication",
@@ -281,40 +240,32 @@
       {
         "skill": "Problem-solving",
         "proficiency": "advanced"
-      },
-      {
-        "skill": "Teamwork",
-        "proficiency": "intermediate"
-      },
-      {
-        "skill": "Adaptability",
-        "proficiency": "advanced"
       }
     ]
   },
   "suggestions": {
-    "summary": "Muhammad Rishal should focus on improving his contact information, addressing spelling/grammar errors, and adding more specific details to his achievements.",
+    "summary": "The candidate should focus on improving their resume by addressing the weaknesses and adding relevant information to enhance their candidacy.",
     "priority_improvements": [
       {
-        "improvement": "Add a clear and concise contact email or phone number to the top of the resume.",
+        "improvement": "Add phone number and/or email address to the contact information section",
         "priority": "high",
-        "impact": "Improved accessibility for recruiters and hiring managers.",
-        "timeline": "Within the next week"
+        "impact": "Improved accessibility for potential employers",
+        "timeline": "Immediate"
       },
       {
-        "improvement": "Carefully proofread the resume to catch any spelling or grammar errors.",
+        "improvement": "Include specific numbers or metrics achieved in previous roles to demonstrate impact",
         "priority": "medium",
-        "impact": "Enhanced professional image and credibility.",
-        "timeline": "Within the next two weeks"
+        "impact": "Increased credibility and trustworthiness",
+        "timeline": "Within the next 2 weeks"
       },
       {
-        "improvement": "Try to include more specific details or metrics about achievements in future roles.",
+        "improvement": "Remove irrelevant information from the resume to improve focus and clarity",
         "priority": "low",
-        "impact": "Improved impression of the candidate's experience.",
+        "impact": "Improved professionalism and attention-grabbing ability",
         "timeline": "Within the next month"
       }
     ]
   },
   "cached": false,
-  "overall_score": 62
+  "overall_score": 74
 }

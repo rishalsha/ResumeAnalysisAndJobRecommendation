@@ -13,6 +13,9 @@ from utils.database import get_user_analysis, get_latest_resume_score
 import plotly.graph_objects as go
 import plotly.express as px
 
+# Import LLMAnalyzer for improvement suggestions tab
+from backend.llm_analyzer import LLMAnalyzer
+
 try:
     from reportlab.lib.pagesizes import letter, A4
     from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer, Image, PageBreak
@@ -553,12 +556,13 @@ def analysis_page():
         analysis_timestamp = analysis_data.get("timestamp", "N/A")
 
     # Tabs for different views
-    tab1, tab2, tab3, tab4, tab5 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
         "📈 Overview",
         "✅ Strengths",
         "⚠️ Weaknesses",
         "🛠️ Skills",
-        "📄 Report"
+        "📄 Report",
+        "💡 Improvement Suggestions"
     ])
     
     # ==================== Tab 1: Overview ====================
@@ -643,12 +647,9 @@ def analysis_page():
     # ==================== Tab 5: Report ====================
     with tab5:
         st.header("📄 Generate Report")
-        
         col1, col2 = st.columns(2)
-        
         with col1:
             st.write("Download a comprehensive PDF report with all your analysis results.")
-            
             if HAS_REPORTLAB:
                 if st.button("📥 Download PDF Report", use_container_width=True, type="primary"):
                     pdf_file = create_pdf_report(report_data, user_name)
@@ -662,32 +663,24 @@ def analysis_page():
                         st.success("✅ PDF generated successfully!")
             else:
                 st.warning("PDF generation not available. Install reportlab: `pip install reportlab`")
-        
         with col2:
             st.write("**Action Buttons:**")
-            
             col_a, col_b = st.columns(2)
-            
             with col_a:
                 if st.button("🔄 Re-analyze Resume", use_container_width=True):
                     st.info("Redirecting to Resume Analysis...")
                     st.markdown("[Go to Resume Analysis →](/?page=Resume%20Analysis)")
-                
                 if st.button("💼 Find Jobs", use_container_width=True):
                     st.info("Redirecting to Job Recommendations...")
                     st.markdown("[Go to Job Recommendations →](/?page=Job%20Recommendations)")
-            
             with col_b:
                 if st.button("✅ Score Resume", use_container_width=True):
                     st.info("Redirecting to Resume Scoring...")
                     st.markdown("[Go to Resume Scoring →](/?page=Resume%20Scoring)")
-                
                 if st.button("📊 Skills Gap Analysis", use_container_width=True):
                     st.info("Redirecting to Skills Gap Analysis...")
                     st.markdown("[Go to Skills Gap Analysis →](/?page=Skills%20Gap%20Analysis)")
-        
         st.divider()
-        
         st.subheader("💡 Next Steps")
         st.markdown("""
         1. **Review Your Strengths** - Leverage these in your applications and interviews
@@ -696,3 +689,74 @@ def analysis_page():
         4. **Score Your Resume** - Get a quantitative measure of your resume quality
         5. **Apply to Jobs** - Use the job recommendations to find matching opportunities
         """)
+
+    # ==================== Tab 6: Improvement Suggestions ====================
+    with tab6:
+        st.header("💡 Resume Improvement Suggestions")
+        # Use LLMAnalyzer to generate suggestions based on weaknesses and resume
+        analyzer = LLMAnalyzer()
+        resume_text = analysis_data.get("extracted_text") or ""
+        weaknesses = _extract_weakness_list(analysis_data.get("weaknesses", {}))
+        if not resume_text:
+            st.info("No resume text found for suggestions.")
+        else:
+            with st.spinner("Generating personalized improvement suggestions..."):
+                suggestions_result = analyzer.analyze_resume(
+                    resume_text,
+                    analyzer.get_improvement_suggestions_prompt,
+                    analysis_type="improvement_suggestions",
+                    use_cache=True
+                )
+            suggestions = suggestions_result.get("suggestions", [])
+            if not suggestions:
+                st.info("No improvement suggestions available.")
+            else:
+                if "applied_suggestions" not in st.session_state:
+                    st.session_state["applied_suggestions"] = {}
+                st.markdown("**Review and apply the following improvement suggestions. Mark as 'Applied' or 'Not Relevant'.**")
+                for idx, suggestion in enumerate(suggestions, 1):
+                    key = f"suggestion_{idx}"
+                    applied_state = st.session_state["applied_suggestions"].get(key, None)
+                    # Handle suggestion as dict or string
+                    if isinstance(suggestion, dict):
+                        display_text = f"{idx}. {suggestion.get('change', str(suggestion))}"
+                        suggestion_text = suggestion.get('change', str(suggestion))
+                    else:
+                        display_text = f"{idx}. {suggestion}"
+                        suggestion_text = str(suggestion)
+                    with st.expander(display_text, expanded=(idx <= 2)):
+                        col1, col2 = st.columns([3, 1])
+                        with col1:
+                            st.markdown("**Before/After Example:**")
+                            before = ""
+                            after = ""
+                            for w in weaknesses:
+                                if isinstance(w, dict) and w.get("fix") and isinstance(w.get("fix"), str) and w.get("fix").lower() in suggestion_text.lower():
+                                    before = w.get("examples", [""])[0] if w.get("examples") else "(Original resume content here)"
+                                    break
+                            if not before:
+                                before = "(Original resume content here)"
+                            after_resp = analyzer.analyze_resume(
+                                before,
+                                lambda txt: f"Rewrite this resume bullet to be more impactful, using action verbs and quantifiable results.\nOriginal: {txt}\nImproved:",
+                                analysis_type=f"improve_example_{idx}",
+                                use_cache=True
+                            )
+                            after = after_resp.get("improved", "(Improved version here)")
+                            st.markdown(f"- **Before:** {before}")
+                            st.markdown(f"- **After:** {after}")
+                            st.markdown("**Section-Specific Advice:**")
+                            st.write("- Add quantifiable metrics to experience bullets.\n- Use strong action verbs.\n- Organize skills by category.\n- Highlight key achievements in summary.\n- Add relevant coursework or GPA in education if strong.\n- Use clear headings and consistent formatting.")
+                            st.markdown("**Learning Resources:**")
+                            st.write("- [Coursera Resume Writing Course](https://www.coursera.org/learn/resume-writing)\n- [Harvard Resume Guide](https://hwpi.harvard.edu/files/ocs/files/hes-resume-cover-letter-guide.pdf)\n- [Canva Resume Templates](https://www.canva.com/resumes/templates/)")
+                        with col2:
+                            st.markdown("**Priority:** High")
+                            st.markdown("**Estimated Score Impact:** +5")
+                            applied = st.radio(
+                                "Status:",
+                                ("Not Reviewed", "Applied", "Not Relevant"),
+                                index=0 if applied_state is None else (1 if applied_state == "Applied" else 2),
+                                key=f"radio_{key}"
+                            )
+                            st.session_state["applied_suggestions"][key] = applied
+                st.success("You can track which suggestions you have applied or skipped. This will help you improve your resume iteratively!")

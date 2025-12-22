@@ -149,6 +149,9 @@ def analysis_page():
     st.caption("Analyze your uploaded resume using AI-powered insights")
 
     # Fetch user's resume from database - always fresh (with timestamp)
+    overall_score = None  # Ensure variable is always defined
+    analyzer = None  # Ensure variable is always defined
+    result = None  # Ensure variable is always defined
     resume_text, resume_ts = _get_user_resume_text_with_ts()
     
     if not resume_text:
@@ -209,193 +212,254 @@ def analysis_page():
                 st.error(f"❌ Analysis failed: {e}")
                 return
 
-        # Check for errors
-        if "error" in result:
-            st.error(f"❌ {result['error']}")
-            if result.get("raw_response"):
-                with st.expander("LLM raw response"):
-                    st.code(result["raw_response"], language="json")
-            st.stop()
+                # Check for errors
+                if "error" in result:
+                    st.error(f"❌ {result['error']}")
+                    if result.get("raw_response"):
+                        with st.expander("LLM raw response"):
+                            st.code(result["raw_response"], language="json")
+                    st.stop()
 
-        # Display results
-        st.subheader("📊 Comprehensive Analysis Results")
+                # Display results
+                st.subheader("📊 Comprehensive Analysis Results")
         
-        # Show cache status
-        if result.get("cached"):
-            st.info("⚡ **Cached Result** - Retrieved from cache (faster)")
+                # Show cache status
+                if result.get("cached"):
+                    st.info("⚡ **Cached Result** - Retrieved from cache (faster)")
         
-        # Overall score
-        overall_score = result.get("overall_score")
-        if isinstance(overall_score, int):
-            st.metric("Overall Resume Score", f"{overall_score}/100")
+                # Overall score
+                overall_score = result.get("overall_score")
+                if isinstance(overall_score, int):
+                    st.metric("Overall Resume Score", f"{overall_score}/100")
 
-        # Create tabs for different analysis types
-        tabs = st.tabs(["🌟 Strengths", "⚠️ Weaknesses", "🔧 Skills", "💡 Suggestions"])
+                # Create tabs for different analysis types
+                tabs = st.tabs(["🌟 Strengths", "⚠️ Weaknesses", "🔧 Skills", "💡 Suggestions"])
         
-        # TAB 1: STRENGTHS
-        with tabs[0]:
-            strengths_data = result.get("strengths", {})
-            summary = strengths_data.get("summary")
-            if summary:
-                st.info(f"Summary: {summary}")
-
-            items = strengths_data.get("items", [])
-            if items:
-                st.markdown(f"**{len(items)} strengths found:**")
-                for item in items:
-                    strength = item.get("strength", "N/A")
-                    meta = []
-                    if item.get("category"):
-                        meta.append(f"Category: {item['category']}")
-                    if item.get("importance"):
-                        meta.append(f"Importance: {item['importance']}")
-                    if item.get("confidence") is not None:
-                        meta.append(f"Confidence: {item['confidence']}%")
-                    line = f"- **{strength}**"
-                    if meta:
-                        line += " (" + " | ".join(meta) + ")"
-                    st.markdown(line)
-                    examples = item.get("examples", [])
-                    if examples:
-                        st.caption("Examples:")
-                        for ex in examples[:2]:
-                            st.markdown(f"  • {ex}")
-            else:
-                st.info("No strengths identified yet.")
-        
-        # TAB 2: WEAKNESSES
-        with tabs[1]:
-            weaknesses_data = result.get("weaknesses", {})
-            summary = weaknesses_data.get("summary")
-            if summary:
-                st.warning(f"Summary: {summary}")
-
-            items = weaknesses_data.get("items", [])
-            if items:
-                st.markdown(f"**{len(items)} areas to improve:**")
-                for item in items:
-                    weakness = item.get("weakness", "N/A")
-                    severity = item.get("severity", "minor")
-                    meta = []
-                    if item.get("category"):
-                        meta.append(f"Category: {item['category']}")
-                    if severity:
-                        meta.append(f"Severity: {severity}")
-                    if item.get("confidence") is not None:
-                        meta.append(f"Confidence: {item['confidence']}%")
-                    line = f"- **{weakness}**"
-                    if meta:
-                        line += " (" + " | ".join(meta) + ")"
-                    st.markdown(line)
-
-                    details = []
-                    if item.get("location"):
-                        details.append(f"Location: {item['location']}")
-                    if item.get("impact"):
-                        details.append(f"Impact: {item['impact']}")
-                    if item.get("fix"):
-                        details.append(f"Fix: {item['fix']}")
-                    for detail in details:
-                        st.caption(detail)
-
-                    examples = item.get("examples", [])
-                    if examples:
-                        st.caption("Examples:")
-                        for ex in examples[:2]:
-                            st.markdown(f"  • {ex}")
-            else:
-                st.info("No weaknesses identified yet.")
-        
-        # TAB 3: SKILLS
-        with tabs[2]:
-            skills_data = result.get("skills", {})
-            summary = skills_data.get("summary")
-            if summary:
-                st.info(f"Summary: {summary}")
-
-            st.subheader("🔧 Technical Skills")
-            technical = skills_data.get("technical", [])
-            if technical:
-                for skill in technical:
-                    if isinstance(skill, dict):
-                        name = skill.get("skill", "N/A")
-                        proficiency = skill.get("proficiency", "intermediate")
-                        st.markdown(f"- **{name}** ({proficiency})")
+                # TAB 1: STRENGTHS
+                with tabs[0]:
+                    strengths_data = result.get("strengths", {})
+                    summary = strengths_data.get("summary")
+                    if summary:
+                        st.info(f"Summary: {summary}")
+                    items = strengths_data.get("items", [])
+                    if items:
+                        st.markdown(f"**{len(items)} strengths found:**")
+                        for item in items:
+                            strength = item.get("strength", "N/A")
+                            meta = []
+                            if item.get("category"):
+                                meta.append(f"Category: {item['category']}")
+                            if item.get("importance"):
+                                meta.append(f"Importance: {item['importance']}")
+                            if item.get("confidence") is not None:
+                                meta.append(f"Confidence: {item['confidence']}%")
+                            line = f"- **{strength}**"
+                            if meta:
+                                line += " (" + " | ".join(meta) + ")"
+                            st.markdown(line)
+                            examples = item.get("examples", [])
+                            if examples:
+                                st.caption("Examples:")
+                                for ex in examples[:2]:
+                                    st.markdown(f"  • {ex}")
                     else:
-                        st.markdown(f"- {skill}")
-            else:
-                st.info("No technical skills identified.")
-
-            st.subheader("💼 Soft Skills")
-            soft = skills_data.get("soft_skills", [])
-            if soft:
-                for skill in soft:
-                    if isinstance(skill, dict):
-                        name = skill.get("skill", "N/A")
-                        proficiency = skill.get("proficiency", "intermediate")
-                        st.markdown(f"- **{name}** ({proficiency})")
-                    else:
-                        st.markdown(f"- {skill}")
-            else:
-                st.info("No soft skills identified.")
+                        st.info("No strengths identified yet.")
         
-        # TAB 4: SUGGESTIONS
-        with tabs[3]:
-            suggestions_data = result.get("suggestions", {})
-            summary = suggestions_data.get("summary")
-            if summary:
-                st.info(f"Roadmap: {summary}")
+                # TAB 2: WEAKNESSES
+                with tabs[1]:
+                    weaknesses_data = result.get("weaknesses", {})
+                    summary = weaknesses_data.get("summary")
+                    if summary:
+                        st.warning(f"Summary: {summary}")
+                    items = weaknesses_data.get("items", [])
+                    if items:
+                        st.markdown(f"**{len(items)} areas to improve:**")
+                        for item in items:
+                            weakness = item.get("weakness", "N/A")
+                            severity = item.get("severity", "minor")
+                            meta = []
+                            if item.get("category"):
+                                meta.append(f"Category: {item['category']}")
+                            if severity:
+                                meta.append(f"Severity: {severity}")
+                            if item.get("confidence") is not None:
+                                meta.append(f"Confidence: {item['confidence']}%")
+                            line = f"- **{weakness}**"
+                            if meta:
+                                line += " (" + " | ".join(meta) + ")"
+                            st.markdown(line)
+                            details = []
+                            if item.get("location"):
+                                details.append(f"Location: {item['location']}")
+                            if item.get("impact"):
+                                details.append(f"Impact: {item['impact']}")
+                            if item.get("fix"):
+                                details.append(f"Fix: {item['fix']}")
+                            for detail in details:
+                                st.caption(detail)
+                            examples = item.get("examples", [])
+                            if examples:
+                                st.caption("Examples:")
+                                for ex in examples[:2]:
+                                    st.markdown(f"  • {ex}")
+                    else:
+                        st.info("No weaknesses identified yet.")
+        
+                # TAB 3: SKILLS
+                with tabs[2]:
+                    skills_data = result.get("skills", {})
+                    summary = skills_data.get("summary")
+                    if summary:
+                        st.info(f"Summary: {summary}")
+                    st.subheader("🔧 Technical Skills")
+                    technical = skills_data.get("technical", [])
+                    if technical:
+                        for skill in technical:
+                            if isinstance(skill, dict):
+                                name = skill.get("skill", "N/A")
+                                proficiency = skill.get("proficiency", "intermediate")
+                                st.markdown(f"- **{name}** ({proficiency})")
+                            else:
+                                st.markdown(f"- {skill}")
+                    else:
+                        st.info("No technical skills identified.")
+                    st.subheader("💼 Soft Skills")
+                    soft = skills_data.get("soft_skills", [])
+                    if soft:
+                        for skill in soft:
+                            if isinstance(skill, dict):
+                                name = skill.get("skill", "N/A")
+                                proficiency = skill.get("proficiency", "intermediate")
+                                st.markdown(f"- **{name}** ({proficiency})")
+                            else:
+                                st.markdown(f"- {skill}")
+                    else:
+                        st.info("No soft skills identified.")
+        
+                # TAB 4: SUGGESTIONS
+                with tabs[3]:
+                    suggestions_data = result.get("suggestions", {})
+                    summary = suggestions_data.get("summary")
+                    if summary:
+                        st.info(f"Roadmap: {summary}")
+                    improvements = suggestions_data.get("priority_improvements", [])
+                    if improvements:
+                        st.markdown(f"**{len(improvements)} priority items:**")
+                        for imp in improvements:
+                            title = imp.get("improvement", "N/A")
+                            meta = []
+                            if imp.get("priority"):
+                                meta.append(f"Priority: {imp['priority']}")
+                            if imp.get("impact"):
+                                meta.append(f"Impact: {imp['impact']}")
+                            if imp.get("timeline"):
+                                meta.append(f"Timeline: {imp['timeline']}")
+                            line = f"- **{title}**"
+                            if meta:
+                                line += " (" + " | ".join(meta) + ")"
+                            st.markdown(line)
+                    else:
+                        st.info("No suggestions available yet.")
 
-            improvements = suggestions_data.get("priority_improvements", [])
-            if improvements:
-                st.markdown(f"**{len(improvements)} priority items:**")
-                for imp in improvements:
-                    title = imp.get("improvement", "N/A")
-                    meta = []
-                    if imp.get("priority"):
-                        meta.append(f"Priority: {imp['priority']}")
-                    if imp.get("impact"):
-                        meta.append(f"Impact: {imp['impact']}")
-                    if imp.get("timeline"):
-                        meta.append(f"Timeline: {imp['timeline']}")
-                    line = f"- **{title}**"
-                    if meta:
-                        line += " (" + " | ".join(meta) + ")"
-                    st.markdown(line)
-            else:
-                st.info("No suggestions available yet.")
+                # --- Resume Improvement Suggestions Section ---
+                st.divider()
+                st.header("🛠️ Resume Improvement Suggestions")
+                display_resume_improvement_suggestions(result, resume_text)
 
-        # Compute summary scores for analysis
-        def _compute_scores(res):
-            scores = {
-                "strengths": {"count": 0, "avg_confidence": 0, "critical": 0, "high": 0, "medium": 0},
-                "weaknesses": {"count": 0, "avg_confidence": 0, "critical": 0, "moderate": 0, "minor": 0},
-                "skills": {"technical_count": 0, "soft_count": 0},
-            }
-            s_items = res.get("strengths", {}).get("items", [])
-            w_items = res.get("weaknesses", {}).get("items", [])
-            tech = res.get("skills", {}).get("technical", [])
-            soft = res.get("skills", {}).get("soft_skills", [])
+                # Compute summary scores for analysis
+                def _compute_scores(res):
+                    scores = {
+                        "strengths": {"count": 0, "avg_confidence": 0, "critical": 0, "high": 0, "medium": 0},
+                        "weaknesses": {"count": 0, "avg_confidence": 0, "critical": 0, "moderate": 0, "minor": 0},
+                        "skills": {"technical_count": 0, "soft_count": 0},
+                    }
+                    s_items = res.get("strengths", {}).get("items", [])
+                    w_items = res.get("weaknesses", {}).get("items", [])
+                    tech = res.get("skills", {}).get("technical", [])
+                    soft = res.get("skills", {}).get("soft_skills", [])
 
-            if s_items:
-                scores["strengths"]["count"] = len(s_items)
-                confidences = [x.get("confidence", 0) for x in s_items if isinstance(x, dict)]
-                scores["strengths"]["avg_confidence"] = int(sum(confidences) / max(len(confidences), 1))
-                for x in s_items:
-                    imp = str(x.get("importance", "medium")).lower()
-                    if imp in scores["strengths"]:
-                        scores["strengths"][imp] += 1
+                    if s_items:
+                        scores["strengths"]["count"] = len(s_items)
+                        confidences = [x.get("confidence", 0) for x in s_items if isinstance(x, dict)]
+                        scores["strengths"]["avg_confidence"] = int(sum(confidences) / max(len(confidences), 1))
+                        for x in s_items:
+                            imp = str(x.get("importance", "medium")).lower()
+                            if imp in scores["strengths"]:
+                                scores["strengths"][imp] += 1
 
-            if w_items:
-                scores["weaknesses"]["count"] = len(w_items)
-                confidences = [x.get("confidence", 0) for x in w_items if isinstance(x, dict)]
-                scores["weaknesses"]["avg_confidence"] = int(sum(confidences) / max(len(confidences), 1))
-                for x in w_items:
-                    sev = str(x.get("severity", "minor")).lower()
-                    if sev in scores["weaknesses"]:
-                        scores["weaknesses"][sev] += 1
+                    if w_items:
+                        scores["weaknesses"]["count"] = len(w_items)
+                        confidences = [x.get("confidence", 0) for x in w_items if isinstance(x, dict)]
+                        scores["weaknesses"]["avg_confidence"] = int(sum(confidences) / max(len(confidences), 1))
+                        for x in w_items:
+                            sev = str(x.get("severity", "minor")).lower()
+                            if sev in scores["weaknesses"]:
+                                scores["weaknesses"][sev] += 1
 
-            scores["skills"]["technical_count"] = len(tech) if isinstance(tech, list) else 0
+                    scores["skills"]["technical_count"] = len(tech) if isinstance(tech, list) else 0
+                    scores["skills"]["soft_count"] = len(soft) if isinstance(soft, list) else 0
+                    return scores
+
+        def display_resume_improvement_suggestions(result, resume_text):
+            """
+            Display actionable, LLM-powered resume improvement suggestions with before/after examples, section-specific advice, priority ranking, score impact, learning resources, and interactive acceptance.
+            """
+            analyzer = LLMAnalyzer()
+            # Generate improvement suggestions using LLM (can cache for user)
+            with st.spinner("Generating personalized improvement suggestions..."):
+                suggestions_result = analyzer.analyze_resume(
+                    resume_text,
+                    analyzer.get_improvement_suggestions_prompt,
+                    analysis_type="improvement_suggestions",
+                    use_cache=True
+                )
+
+            suggestions = suggestions_result.get("suggestions", [])
+            if not suggestions:
+                st.info("No improvement suggestions available.")
+                return
+
+            # Track user acceptance state
+            if "applied_suggestions" not in st.session_state:
+                st.session_state["applied_suggestions"] = {}
+
+            st.markdown("**Review and apply the following improvement suggestions. Mark as 'Applied' or 'Not Relevant'.**")
+            for idx, suggestion in enumerate(suggestions, 1):
+                key = f"suggestion_{idx}"
+                applied_state = st.session_state["applied_suggestions"].get(key, None)
+                with st.expander(f"{idx}. {suggestion}", expanded=(idx <= 2)):
+                    col1, col2 = st.columns([3, 1])
+                    with col1:
+                        # Before/After example (LLM-powered)
+                        st.markdown("**Before/After Example:**")
+                        before = "(Original resume content here)"  # Placeholder: extract from weaknesses/examples if available
+                        after = analyzer.analyze_resume(
+                            before,
+                            lambda txt: f"Rewrite this resume bullet to be more impactful, using action verbs and quantifiable results.\nOriginal: {txt}\nImproved:",
+                            analysis_type=f"improve_example_{idx}",
+                            use_cache=True
+                        ).get("improved", "(Improved version here)")
+                        st.markdown(f"- **Before:** {before}")
+                        st.markdown(f"- **After:** {after}")
+                        # Section-specific advice (mocked for now)
+                        st.markdown("**Section-Specific Advice:**")
+                        st.write("- Add quantifiable metrics to experience bullets.\n- Use strong action verbs.\n- Organize skills by category.\n- Highlight key achievements in summary.")
+                        # Learning resources (mocked for now)
+                        st.markdown("**Learning Resources:**")
+                        st.write("- [Coursera Resume Writing Course](https://www.coursera.org/learn/resume-writing)\n- [Harvard Resume Guide](https://hwpi.harvard.edu/files/ocs/files/hes-resume-cover-letter-guide.pdf)\n- [Canva Resume Templates](https://www.canva.com/resumes/templates/)")
+                    with col2:
+                        # Priority and score impact (mocked for now)
+                        st.markdown("**Priority:** High")
+                        st.markdown("**Estimated Score Impact:** +5")
+                        # Interactive acceptance
+                        applied = st.radio(
+                            "Status:",
+                            ("Not Reviewed", "Applied", "Not Relevant"),
+                            index=0 if applied_state is None else (1 if applied_state == "Applied" else 2),
+                            key=f"radio_{key}"
+                        )
+                        st.session_state["applied_suggestions"][key] = applied
+            st.success("You can track which suggestions you have applied or skipped. This will help you improve your resume iteratively!")
             scores["skills"]["soft_count"] = len(soft) if isinstance(soft, list) else 0
             return scores
 
@@ -404,7 +468,7 @@ def analysis_page():
 
         # SAVE ALL DATA TO DATABASE
         user_id = st.session_state.get("user_id")
-        if user_id:
+        if user_id and result is not None:
             try:
                 # Save comprehensive data as JSON strings
                 save_resume_analysis(
@@ -421,15 +485,16 @@ def analysis_page():
                 st.warning(f"⚠️ Analysis complete but could not save: {e}")
 
         # Show token stats
-        stats = analyzer.get_token_stats()
-        with st.expander("📈 Token Statistics"):
-            col1, col2, col3 = st.columns(3)
-            with col1:
-                st.metric("Total Tokens", stats.get('total_tokens', 0))
-            with col2:
-                st.metric("API Requests", stats.get('requests_count', 0))
-            with col3:
-                if stats.get('requests_count', 0) > 0:
-                    avg_tokens = stats.get('total_tokens', 0) // stats.get('requests_count', 1)
-                    st.metric("Avg Tokens/Request", avg_tokens)
+        if analyzer is not None:
+            stats = analyzer.get_token_stats()
+            with st.expander("📈 Token Statistics"):
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    st.metric("Total Tokens", stats.get('total_tokens', 0))
+                with col2:
+                    st.metric("API Requests", stats.get('requests_count', 0))
+                with col3:
+                    if stats.get('requests_count', 0) > 0:
+                        avg_tokens = stats.get('total_tokens', 0) // stats.get('requests_count', 1)
+                        st.metric("Avg Tokens/Request", avg_tokens)
 

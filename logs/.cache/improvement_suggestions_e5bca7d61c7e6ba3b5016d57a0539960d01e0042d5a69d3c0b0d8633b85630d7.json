@@ -1,0 +1,44 @@
+{
+  "suggestions": [
+    {
+      "section": "Education",
+      "change": "Added a 'Bachelor of Technology' degree title instead of 'B.Tech \u2013 Computer Science and Engineering'"
+    },
+    {
+      "section": "Experience",
+      "change": "Quantified achievements for remote software development intern experience (e.g. 'Improved code completion time by 30% using optimized algorithms')"
+    },
+    {
+      "section": "Projects",
+      "change": "Used a standard project format template to list each project with its own section"
+    },
+    {
+      "section": "Technical Skills",
+      "change": "Prioritized skills categories for easier reading, and used standardized abbreviations (e.g. 'Backend & Systems' instead of 'Node.js, TypeScript, Express.js, Spring Boot, REST APIs')"
+    },
+    {
+      "section": "Formatting",
+      "change": "Used bullet points consistently throughout the resume"
+    },
+    {
+      "section": "Keywords",
+      "change": "Added relevant industry keywords (e.g. 'Cloud Computing', 'DevOps', 'Artificial Intelligence') to enhance searchability"
+    },
+    {
+      "section": "Summary",
+      "change": "Concise summary statement using 2-3 bullet points with strong action verbs"
+    },
+    {
+      "section": "Work Experience",
+      "change": "Emphasized achievements and impact of each role, rather than just job responsibilities"
+    },
+    {
+      "section": "Skills",
+      "change": "Included relevant skills categories for specific technologies (e.g. 'Python: Data Structures, Machine Learning')"
+    },
+    {
+      "section": "Projects",
+      "change": "Added a standard project format template to make it easier to read and scan"
+    }
+  ]
+}
