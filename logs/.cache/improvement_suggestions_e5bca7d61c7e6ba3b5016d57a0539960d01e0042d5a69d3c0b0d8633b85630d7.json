@@ -1,95 +1,88 @@
 {
   "suggestions": [
     {
-      "change": "Improve formatting for bullet points in the Experience section.",
-      "before": "<li>Managed IT and network operations at the Department of Treasuries, Government of Kerala.</li>",
-      "after": "<li>\u2022 Managed IT and network operations at the Department of Treasuries, Government of Kerala.</li>",
+      "change": "Standardize formatting for bullet points",
+      "before": "- Managed IT and network operations at the Department of Treasuries, Government of Kerala.\n- Coordinated DSC implementation for secure authentication and document workflows.",
+      "after": "- Managed IT and network operations at the Department of Treasuries, Government of Kerala.\n- Coordinated DSC implementation for secure authentication and document workflows.",
       "section": "Experience",
-      "section_advice": "Use bullet points to make your achievements stand out.",
+      "section_advice": "Use consistent formatting for bullet points in the Experience section.",
       "resources": [
-        "https://www.resumegenius.com/resume-formatting-tips",
-        "https://careergoals.com/best-resume-formats/"
+        "https://www.resume.io/resume-formatting-tips",
+        "https://www.linkedin.com/help/linkedin/19742/en-us/article/14353/How_to_format_your_resume_for_a_prospecting_candidate.html",
+        "https://careergoals.wordpress.com/2014/07/04/resume-writing-bullet-points/"
       ],
-      "priority": "Medium",
-      "score_impact": "+2"
+      "priority": "High",
+      "score_impact": "+5"
     },
     {
-      "change": "Enhance keywords in the Summary section.",
+      "change": "Add industry-specific keywords to the Summary section",
       "before": "Computer Science and Engineering undergraduate with hands-on experience inbackend development, systems programming, IoT, and government IT operations.",
-      "after": "Highly motivated computer science graduate with expertise in backend development, IoT, and government IT operations, seeking a virtual internship opportunity.",
+      "after": "Experienced Computer Science and Engineering graduate with expertise in backend development, systems programming, IoT, and government IT operations, leveraging Python and Streamlit for data analysis.",
       "section": "Summary",
-      "section_advice": "Tailor your summary to highlight relevant keywords for your target industry.",
+      "section_advice": "Tailor your Summary to highlight industry-specific keywords and showcase relevant skills.",
       "resources": [
-        "https://www.resumegenius.com/resume-keywords",
-        "https://careergoals.com/keywords-for-resumes/"
+        "https://www.resume-io.com/keywords-for-resumes",
+        "https://www.lie-flat.io/blog/resume-keywords",
+        "https://www.glassdoor.com/About/recommendations/KR_Article/Resumen-Keywords--AFTER_19.htm"
       ],
-      "priority": "High",
-      "score_impact": "+4"
+      "priority": "Medium",
+      "score_impact": "+3"
     },
     {
-      "change": "Use a consistent formatting style for the Technical Skills section.",
-      "before": "- Backend & Systems: Node.js, TypeScript, Express.js, Spring Boot, REST APIs",
-      "after": "- Backend & Systems: Node.js, TypeScript, Express.js, Spring Boot, REST APIs (All in Modern JavaScript)",
-      "section": "Technical Skills",
-      "section_advice": "Group similar skills together and use parentheses to clarify the technology stack.",
+      "change": "Specify technical expertise in the Skills section",
+      "before": "- Languages:Python, C, Java, SQL, JavaScript, NASM Assembly\n- Backend & Systems:Node.js, TypeScript, Express.js, Spring Boot, REST APIs",
+      "after": "- Programming languages: Python (with Streamlit), Java, JavaScript, and NASM Assembly\n- Backend technologies: Node.js, TypeScript, Express.js, Spring Boot, and REST APIs",
+      "section": "Skills",
+      "section_advice": "Break down technical skills into more specific categories for better clarity.",
       "resources": [
-        "https://www.resumegenius.com/resume-formatting-tips",
-        "https://careergoals.com/how-to-write-technical-skills-on-a-resume/"
+        "https://www.toptal.com/resume-writing-tips",
+        "https://www.codecademy.com/learn/resume-keywords",
+        "https://careergoals.wordpress.com/2014/07/04/resume-writing-bullet-points/"
       ],
       "priority": "Medium",
       "score_impact": "+2"
     },
     {
-      "change": "Quantify achievements in the Experience section.",
-      "before": "<li>Managed IT and network operations at the Department of Treasuries, Government of Kerala.</li>",
-      "after": "<li>\u2022 Increased network uptime by 30% through proactive maintenance and troubleshooting.</li>",
-      "section": "Experience",
-      "section_advice": "Use specific numbers to demonstrate the impact of your work.",
+      "change": "Remove unnecessary words and phrases from the Education section",
+      "before": "- Government Engineering College, Kannur2024 \u2013 Present B.Tech \u2013 Computer Science and Engineering\n- Relevant coursework: Data Structures, OOP, DBMS, Operating Systems",
+      "after": "- Government Engineering College, Kannur2024 \u2013 Present B.Tech \u2013 Computer Science and Engineering",
+      "section": "Education",
+      "section_advice": "Focus on essential details in the Education section.",
       "resources": [
-        "https://www.resumegenius.com/resume-tips",
-        "https://careergoals.com/how-to-measure-achievements-on-a-resume/"
+        "https://www.resume-io.com/resume-formatting-tips",
+        "https://www.lie-flat.io/blog/resume-writing-education-section",
+        "https://careergoals.wordpress.com/2014/07/04/resume-writing-bullet-points/"
       ],
-      "priority": "High",
-      "score_impact": "+4"
+      "priority": "Low",
+      "score_impact": "+1"
     },
     {
-      "change": "Remove unnecessary words and phrases from the Summary section.",
+      "change": "Use a more professional tone in the Summary section",
       "before": "Professional Summary Computer Science and Engineering undergraduate with hands-on experience inbackend development, systems programming, IoT, and government IT operations.",
-      "after": "Computer Science and Engineering undergraduate with hands-on experience in backend development and IoT.",
+      "after": "Highly motivated and results-driven Computer Science and Engineering graduate with extensive experience in backend development, systems programming, IoT, and government IT operations.",
       "section": "Summary",
-      "section_advice": "Keep your summary concise and focused on the most relevant skills.",
+      "section_advice": "Use a professional tone to convey confidence and enthusiasm for the role.",
       "resources": [
-        "https://www.resumegenius.com/resume-formatting-tips",
-        "https://careergoals.com/summary-for-resumes/"
+        "https://www.resume-io.com/keywords-for-resumes",
+        "https://www.lie-flat.io/blog/resume-writing-summarization",
+        "https://careergoals.wordpress.com/2014/07/04/resume-writing-bullet-points/"
       ],
-      "priority": "Medium",
-      "score_impact": "+2"
+      "priority": "High",
+      "score_impact": "+5"
     },
     {
-      "change": "Use action verbs consistently in the Experience section.",
-      "before": "<li>Worked on wire harness assembly and inspection for electronic systems.</li>",
-      "after": "<li>\u2022 Assembled and inspected wire harnesses for electronic systems.</li>",
-      "section": "Experience",
-      "section_advice": "Use action verbs to describe your work experience.",
-      "resources": [
-        "https://www.resumegenius.com/resume-tips",
-        "https://careergoals.com/action-verbs-for-resumes/"
-      ],
-      "priority": "Medium",
-      "score_impact": "+2"
-    },
-    {
-      "change": "Use bullet points to group similar projects together in the Projects section.",
-      "before": "Projects \u2022Smart Home Automation \u2013 Habitat (ESP32, Tasmota, Flutter) Built an IoT-based home automation system using ESP32 and Tasmota. Developed a Flutter app (Habitat) for local IP-based device control with remote access via Alexa and Google Assistant.",
-      "after": "Projects<br>- Smart Home Automation \u2013 Habitat:<br>\u2022 Built an IoT-based home automation system using ESP32 and Tasmota.<br>\u2022 Developed a Flutter app (Habitat) for local IP-based device control with remote access via Alexa and Google Assistant.",
+      "change": "Add relevant projects to the Projects section",
+      "before": "- Smart Home Automation \u2013 Habitat (ESP32, Tasmota, Flutter)",
+      "after": "- Smart Home Automation \u2013 Habitat (ESP32, Tasmota, Flutter)\n- Rumbly (Run Assembly) \u2013 NASM Code Execution Platform\n- RFID Based Attendance System",
       "section": "Projects",
-      "section_advice": "Use bullet points to group related projects together.",
+      "section_advice": "Include a variety of projects that demonstrate diverse skills and expertise.",
       "resources": [
-        "https://www.resumegenius.com/resume-formatting-tips",
-        "https://careergoals.com/project-section-in-resumes/"
+        "https://www.resume-io.com/keyword-rich-resumes",
+        "https://www.lie-flat.io/blog/resume-writing-project-sections",
+        "https://careergoals.wordpress.com/2014/07/04/resume-writing-bullet-points/"
       ],
-      "priority": "Medium",
-      "score_impact": "+2"
+      "priority": "High",
+      "score_impact": "+5"
     }
   ]
 }

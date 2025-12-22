@@ -701,15 +701,18 @@ def analysis_page():
         else:
             redo = st.button("🔄 Redo Improvement Suggestions", use_container_width=True)
             use_cache = not redo
-            with st.spinner("Generating personalized improvement suggestions..." if not redo else "Regenerating improvement suggestions (no cache)..."):
+            with st.spinner("Generating personalized improvement suggestions..." if not redo else "Regenerating improvement suggestions ..."):
                 suggestions_result = analyzer.analyze_resume(
                     resume_text,
                     analyzer.get_improvement_suggestions_prompt,
                     analysis_type="improvement_suggestions",
                     use_cache=use_cache
                 )
+                # After a redo, always cache the new result if not errored
+                if redo and "error" not in suggestions_result:
+                    analyzer.cache.set(resume_text, "improvement_suggestions", suggestions_result)
             suggestions = suggestions_result.get("suggestions", [])
-            if suggestions_result.get("cached"):
+            if suggestions_result.get("cached") and not redo:
                 st.info("Loaded from cache for this resume. Redo to refresh.")
             if not suggestions:
                 st.info("No improvement suggestions available.")
