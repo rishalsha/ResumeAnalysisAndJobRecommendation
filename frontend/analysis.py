@@ -693,7 +693,6 @@ def analysis_page():
     # ==================== Tab 6: Improvement Suggestions ====================
     with tab6:
         st.header("💡 Resume Improvement Suggestions")
-        # Use LLMAnalyzer to generate suggestions based on weaknesses and resume
         analyzer = LLMAnalyzer()
         resume_text = analysis_data.get("extracted_text") or ""
         weaknesses = _extract_weakness_list(analysis_data.get("weaknesses", {}))
@@ -710,6 +709,8 @@ def analysis_page():
                     use_cache=use_cache
                 )
             suggestions = suggestions_result.get("suggestions", [])
+            if suggestions_result.get("cached"):
+                st.info("Loaded from cache for this resume. Redo to refresh.")
             if not suggestions:
                 st.info("No improvement suggestions available.")
             else:
