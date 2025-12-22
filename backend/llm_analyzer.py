@@ -346,15 +346,37 @@ Provide your analysis as a JSON object with the following structure:
 Include all relevant skills found. Return ONLY valid JSON, no additional text."""
     
     def get_improvement_suggestions_prompt(self, resume_text: str) -> str:
-        """Generate prompt for improvement suggestions."""
-        return f"""You are an expert career coach and resume writer.
-Provide actionable suggestions to improve the following resume.
+        """Generate prompt for improvement suggestions with dynamic advice and resources."""
+        return f"""
+You are an expert career coach and resume writer.
+Analyze the following resume and provide a list of improvement suggestions.
 
-Resume:
-{resume_text}
+For each suggestion, return a JSON object with these fields:
+    - change: A concise description of the recommended change.
+    - before: The original resume text or bullet (if applicable).
+    - after: The improved version of the text or bullet (if applicable).
+    - section: The resume section this applies to (e.g., Experience, Education, Skills, Summary, Formatting).
+    - section_advice: Section-specific advice for this change (1-3 sentences).
+    - resources: A list of 2-3 links to relevant courses, templates, or guides for this improvement.
+    - priority: High/Medium/Low (impact on resume quality).
+    - score_impact: Estimated score improvement (e.g., "+5").
 
-Provide your analysis as a JSON object with the following structure:
-{{"suggestions": ["suggestion1", "suggestion2", ...]}}
+Return your response as a JSON object with this structure:
+{{
+    "suggestions": [
+        {{
+            "change": "...",
+            "before": "...",
+            "after": "...",
+            "section": "...",
+            "section_advice": "...",
+            "resources": ["...", "..."],
+            "priority": "...",
+            "score_impact": "..."
+        }},
+        ...
+    ]
+}}
 
 Focus on:
 - Specific, actionable improvements
@@ -363,7 +385,10 @@ Focus on:
 - Keywords and industry terminology
 - Formatting and presentation tips
 
-Return ONLY valid JSON, no additional text."""
+Return ONLY valid JSON, no additional text.
+Resume:
+{resume_text}
+"""
     
     def get_job_match_prompt(self, resume_text: str, job_description: str) -> str:
         """Generate prompt for job matching analysis."""

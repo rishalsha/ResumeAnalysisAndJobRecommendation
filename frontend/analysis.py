@@ -700,12 +700,14 @@ def analysis_page():
         if not resume_text:
             st.info("No resume text found for suggestions.")
         else:
-            with st.spinner("Generating personalized improvement suggestions..."):
+            redo = st.button("🔄 Redo Improvement Suggestions", use_container_width=True)
+            use_cache = not redo
+            with st.spinner("Generating personalized improvement suggestions..." if not redo else "Regenerating improvement suggestions (no cache)..."):
                 suggestions_result = analyzer.analyze_resume(
                     resume_text,
                     analyzer.get_improvement_suggestions_prompt,
                     analysis_type="improvement_suggestions",
-                    use_cache=True
+                    use_cache=use_cache
                 )
             suggestions = suggestions_result.get("suggestions", [])
             if not suggestions:
@@ -721,37 +723,43 @@ def analysis_page():
                     if isinstance(suggestion, dict):
                         display_text = f"{idx}. {suggestion.get('change', str(suggestion))}"
                         suggestion_text = suggestion.get('change', str(suggestion))
+                        before = suggestion.get('before', "(Original resume content here)")
+                        after = suggestion.get('after', "(Improved version here)")
+                        section_advice = suggestion.get('section_advice', "- Add quantifiable metrics to experience bullets.\n- Use strong action verbs.\n- Organize skills by category.\n- Highlight key achievements in summary.\n- Add relevant coursework or GPA in education if strong.\n- Use clear headings and consistent formatting.")
+                        resources = suggestion.get('resources', [
+                            "[Coursera Resume Writing Course](https://www.coursera.org/learn/resume-writing)",
+                            "[Harvard Resume Guide](https://hwpi.harvard.edu/files/ocs/files/hes-resume-cover-letter-guide.pdf)",
+                            "[Canva Resume Templates](https://www.canva.com/resumes/templates/)"
+                        ])
+                        priority = suggestion.get('priority', "High")
+                        score_impact = suggestion.get('score_impact', "+5")
                     else:
                         display_text = f"{idx}. {suggestion}"
                         suggestion_text = str(suggestion)
+                        before = "(Original resume content here)"
+                        after = "(Improved version here)"
+                        section_advice = "- Add quantifiable metrics to experience bullets.\n- Use strong action verbs.\n- Organize skills by category.\n- Highlight key achievements in summary.\n- Add relevant coursework or GPA in education if strong.\n- Use clear headings and consistent formatting."
+                        resources = [
+                            "[Coursera Resume Writing Course](https://www.coursera.org/learn/resume-writing)",
+                            "[Harvard Resume Guide](https://hwpi.harvard.edu/files/ocs/files/hes-resume-cover-letter-guide.pdf)",
+                            "[Canva Resume Templates](https://www.canva.com/resumes/templates/)"
+                        ]
+                        priority = "High"
+                        score_impact = "+5"
                     with st.expander(display_text, expanded=(idx <= 2)):
                         col1, col2 = st.columns([3, 1])
                         with col1:
                             st.markdown("**Before/After Example:**")
-                            before = ""
-                            after = ""
-                            for w in weaknesses:
-                                if isinstance(w, dict) and w.get("fix") and isinstance(w.get("fix"), str) and w.get("fix").lower() in suggestion_text.lower():
-                                    before = w.get("examples", [""])[0] if w.get("examples") else "(Original resume content here)"
-                                    break
-                            if not before:
-                                before = "(Original resume content here)"
-                            after_resp = analyzer.analyze_resume(
-                                before,
-                                lambda txt: f"Rewrite this resume bullet to be more impactful, using action verbs and quantifiable results.\nOriginal: {txt}\nImproved:",
-                                analysis_type=f"improve_example_{idx}",
-                                use_cache=True
-                            )
-                            after = after_resp.get("improved", "(Improved version here)")
                             st.markdown(f"- **Before:** {before}")
                             st.markdown(f"- **After:** {after}")
                             st.markdown("**Section-Specific Advice:**")
-                            st.write("- Add quantifiable metrics to experience bullets.\n- Use strong action verbs.\n- Organize skills by category.\n- Highlight key achievements in summary.\n- Add relevant coursework or GPA in education if strong.\n- Use clear headings and consistent formatting.")
+                            st.write(section_advice)
                             st.markdown("**Learning Resources:**")
-                            st.write("- [Coursera Resume Writing Course](https://www.coursera.org/learn/resume-writing)\n- [Harvard Resume Guide](https://hwpi.harvard.edu/files/ocs/files/hes-resume-cover-letter-guide.pdf)\n- [Canva Resume Templates](https://www.canva.com/resumes/templates/)")
+                            for r in resources:
+                                st.write(f"- {r}")
                         with col2:
-                            st.markdown("**Priority:** High")
-                            st.markdown("**Estimated Score Impact:** +5")
+                            st.markdown(f"**Priority:** {priority}")
+                            st.markdown(f"**Estimated Score Impact:** {score_impact}")
                             applied = st.radio(
                                 "Status:",
                                 ("Not Reviewed", "Applied", "Not Relevant"),
